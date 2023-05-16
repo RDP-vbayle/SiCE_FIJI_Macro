@@ -18,7 +18,11 @@ Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.
 ## Macros
 
  ### SpotDetector 
- ![SiCE SpotDetector](SpotDetector)
+ As described in [Bayle et al.2017](https://bio-protocol.org/pdf/bio-protocol2145.pdf), this macro allows automatic counting of the number of intracellular compartments in Arabidopsis root cells, which can be used for example to study endocytosis
+or secretory trafficking pathways and to compare membrane organization between different genotypes
+or treatments. While developed for Arabidopsis roots, this method can be used on other tissues, cell
+types and plant species.  
+![SiCE SpotDetector](SpotDetector)
  
 ### FRAPanalyser
 ![SiCE FRAPanalyser](FRAPanalyser)
@@ -39,7 +43,7 @@ This Fiji macro helps analysis Arabidopsis T-DNA transformed segregation with th
  Three  insertions: 94%  Fluorescent & 6% Black seeds  
  Single insertion Embryo lethal: 66% Fluorescent & 33% Black seeds  
  Single insertion Gametophyte lethal: 50% Fluorescent & 50% Black seeds  
- ![](assets/images/FastRedTable.png)
+ ![](assets/images/FastRedTable.png)  
 [SiCE FastRed](FastRed)
  ### SeedDev_Curvature
 ![SeedDev_Curvature](Curvature)
