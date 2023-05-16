@@ -27,6 +27,11 @@ Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.
 ### ToolBox
 [SiCE ToolBox](ToolBox)
 ### FastRed
+This Fiji macro helps analysis Arabidopsis T-DNA transformed segregation with the [fast red selection](https://pubmed.ncbi.nlm.nih.gov/19891705/).The technology is based on the expression of a fluorescent co-dominant screenable marker FAST, under the control of a seed-specific promoter.The FAST marker harbors a fusion gene encoding either GFP or RFP with an oil body membrane protein that is prominent in seeds.
+
+ - Macro INPUT: Brightfield image of the seeds, name of the line ended by "_bf" and the corresponding fluo image (example: 1903-1-01_bf and 1903-1-01 pictures).
+  ![](assets/images/FastRedfiles.png)
+ - 
 [SiCE FastRed](FastRed)
  ### SeedDev_Curvature
 ![SeedDev_Curvature](Curvature)
@@ -36,6 +41,10 @@ Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.
 - ![SeedDev_Nuclei](Nuclei)
 ###  
 - Misc...
+
+
+
+
 
 
 
