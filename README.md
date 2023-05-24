@@ -29,10 +29,11 @@ This macro helps extracting fluorescence intensities from FRAP acquisitions in A
 - INPUT: Folder containing .stk or .nd files corresponding to FRAP time lapse acquisisions.
 - Additional Plugin: [Wavelet_A_trou](FRAPanalysis) that must be copied in your FIJI/plugin folder and needed for root segementation and [FAST4DReg](https://imagej.net/plugins/fast4dreg) plugin requested for XY drift correction.
 - OUTPUT: Table containing Fluorescence intensity measuremennts for control and bleached ROIs.
-1. Select parameters: ![](assets/images/FRAP_parameters.png)
+1. Select parameters: ![](assets/images/FRAP_parameters.png).
 2. Select folder
 3. Point Pixel outside Arabidopsis root ![](assets/images/FRAP_Noise.png).
-4. 
+4. If detected nb of bleached area if superior to the one indicated in parameters selections, you will have to remove extra-ROIs.
+5. 
 
 
 ![SiCE FRAPanalysis](FRAPanalysis)
