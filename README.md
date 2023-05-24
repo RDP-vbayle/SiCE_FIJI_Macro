@@ -7,7 +7,7 @@ Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.
 ![](http://www.ens-lyon.fr/RDP/local/cache-vignettes/L130xH130/siteon0-1ee2f.jpg?1680013421) ![](http://www.ens-lyon.fr/RDP/SiCE/Home_Fr_files/Sans%20titre%20-%201_1.png)![](assets/images/sice_logo.png)
 ## Quick links
 - [SiCE SpotDetector](#SpotDetector )
-- [SiCE FRAPanalyser](#FRAPanalyser)
+- [SiCE FRAPanalysis](#FRAPanalysis)
 - [SiCE RootGravi](#RootGravi)
 - [SiCE ToolBox](#ToolBox)
 -  [SiCE FastRed](#FastRed)
@@ -24,8 +24,18 @@ or treatments. While developed for Arabidopsis roots, this method can be used on
 types and plant species.  
 ![SiCE SpotDetector](SpotDetector)
  
-### FRAPanalyser
-![SiCE FRAPanalyser](FRAPanalyser)
+### FRAPanalysis
+This macro helps extracting fluorescence intensities from FRAP acquisitions in Arabidopsis thaliana. This method has been used in [Simon et al 2016](https://www.nature.com/articles/nplants201689) and [PLatre et al. 2019](https://www.science.org/doi/full/10.1126/science.aav9959?casa_token=BfJcTbtNSzIAAAAA%3AX1emsw9qSPBOSUtdSkBRk3tFPjSrMfrZu5W8kFS26HKSJjIu5wB61PBMvcO-gKfv6Ds7JBM9TeQXkw) publications.
+- INPUT: Folder containing .stk or .nd files corresponding to FRAP time lapse acquisisions.
+- Additional Plugin: [Wavelet_A_trou](FRAPanalysis) that must be copied in your FIJI/plugin folder and needed for root segementation and [FAST4DReg](https://imagej.net/plugins/fast4dreg) plugin requested for XY drift correction.
+- OUTPUT: Table containing Fluorescence intensity measuremennts for control and bleached ROIs.
+1. Select parameters: ![](assets/images/FRAP_parameters.png)
+2. Select folder
+3. Point Pixel outside Arabidopsis root ![](assets/images/FRAP_Noise.png).
+4. 
+
+
+![SiCE FRAPanalysis](FRAPanalysis)
 ### RootGravi
 [SiCE RootGravi](RootGravi)
 ### ToolBox
@@ -33,7 +43,7 @@ types and plant species.
 ### FastRed
 This Fiji macro helps analysis Arabidopsis T-DNA transformed segregation with the [fast red selection](https://pubmed.ncbi.nlm.nih.gov/19891705/).The technology is based on the expression of a fluorescent co-dominant screenable marker FAST, under the control of a seed-specific promoter.The FAST marker harbors a fusion gene encoding either GFP or RFP with an oil body membrane protein that is prominent in seeds.
 
- - Additional PLugin: [Distance Based Watershed](https://imagej.net/plugins/distance-transform-watershed )part of the MorphoLibJ library 
+ - Additional PLugin: [Distance Based Watershed](https://imagej.net/plugins/distance-transform-watershed ) part of the MorphoLibJ library 
  - Macro INPUT: Folder containing Brightfield images of the seeds, name of the line ended by "_bf" and the corresponding fluo image (example: 1903-1-01_bf and 1903-1-01 pictures).
   ![](assets/images/FastRedFiles.png)
  - Macro OUTPUT: Table containing Pictures names, number of seeds segmented, number of fluorescent seeds and corresponding ratio and Segregation as following:  
