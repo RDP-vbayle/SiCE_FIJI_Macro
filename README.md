@@ -7,7 +7,7 @@ Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.
 ![](http://www.ens-lyon.fr/RDP/local/cache-vignettes/L130xH130/siteon0-1ee2f.jpg?1680013421) ![](http://www.ens-lyon.fr/RDP/SiCE/Home_Fr_files/Sans%20titre%20-%201_1.png)![](assets/images/sice_logo.png)
 ## Quick links
 - [SiCE SpotDetector](#SpotDetector )
-- [SiCE FRAPanalyser](#FRAPanalyser)
+- [SiCE FRAPanalysis](#FRAPanalysis)
 - [SiCE RootGravi](#RootGravi)
 - [SiCE ToolBox](#ToolBox)
 -  [SiCE FastRed](#FastRed)
@@ -29,6 +29,12 @@ This macro helps extracting fluorescence intensities from FRAP acquisitions in A
 - INPUT: Folder containing .stk or .nd files corresponding to FRAP time lapse acquisisions.
 - Additional Plugin: [Wavelet_A_trou](FRAPanalysis) that must be copied in your FIJI/plugin folder and needed for root segementation and [FAST4DReg](https://imagej.net/plugins/fast4dreg) plugin requested for XY drift correction.
 - OUTPUT: Table containing Fluorescence intensity measuremennts for control and bleached ROIs.
+1. Select parameters: ![](assets/images/FRAP_parameters.png)
+2. Select folder
+3. Point Pixel outside Arabidopsis root ![](assets/images/FRAP_Noise.png).
+4. 
+
+
 ![SiCE FRAPanalysis](FRAPanalysis)
 ### RootGravi
 [SiCE RootGravi](RootGravi)
