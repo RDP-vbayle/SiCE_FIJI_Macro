@@ -25,10 +25,11 @@ types and plant species.
 ![SiCE SpotDetector](SpotDetector)
  
 ### FRAPanalysis
-This macro helps extracting fluorescence intensities from FRAP acquisitions in Arabidopsis thaliana. This method has been used in [Simon et al ](https://www.nature.com/articles/nplants201689)[PLatre et al. 2019](https://www.science.org/doi/full/10.1126/science.aav9959?casa_token=BfJcTbtNSzIAAAAA%3AX1emsw9qSPBOSUtdSkBRk3tFPjSrMfrZu5W8kFS26HKSJjIu5wB61PBMvcO-gKfv6Ds7JBM9TeQXkw) publications.
-- INPUT
-- Additional Plugin: Wavelet_A_trou that must be copied in your FIJI/plugin folder and FAST4DReg](https://imagej.net/plugins/fast4dreg)
-![SiCE FRAPanalysis](FRAPanalyssis)
+This macro helps extracting fluorescence intensities from FRAP acquisitions in Arabidopsis thaliana. This method has been used in [Simon et al 2016](https://www.nature.com/articles/nplants201689) and [PLatre et al. 2019](https://www.science.org/doi/full/10.1126/science.aav9959?casa_token=BfJcTbtNSzIAAAAA%3AX1emsw9qSPBOSUtdSkBRk3tFPjSrMfrZu5W8kFS26HKSJjIu5wB61PBMvcO-gKfv6Ds7JBM9TeQXkw) publications.
+- INPUT: Folder containing .stk or .nd files corresponding to FRAP time lapse acquisisions.
+- Additional Plugin: [Wavelet_A_trou](FRAPanalysis) that must be copied in your FIJI/plugin folder and needed for root segementation and [FAST4DReg](https://imagej.net/plugins/fast4dreg) plugin requested for XY drift correction.
+- OUTPUT: Table containing Fluorescence intensity measuremennts for control and bleached ROIs.
+![SiCE FRAPanalysis](FRAPanalysis)
 ### RootGravi
 [SiCE RootGravi](RootGravi)
 ### ToolBox
