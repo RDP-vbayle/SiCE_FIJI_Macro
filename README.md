@@ -24,8 +24,11 @@ or treatments. While developed for Arabidopsis roots, this method can be used on
 types and plant species.  
 ![SiCE SpotDetector](SpotDetector)
  
-### FRAPanalyser
-![SiCE FRAPanalyser](FRAPanalyser)
+### FRAPanalysis
+This macro helps extracting fluorescence intensities from FRAP acquisitions in Arabidopsis thaliana. This method has been used in [Simon et al ](https://www.nature.com/articles/nplants201689)[PLatre et al. 2019](https://www.science.org/doi/full/10.1126/science.aav9959?casa_token=BfJcTbtNSzIAAAAA%3AX1emsw9qSPBOSUtdSkBRk3tFPjSrMfrZu5W8kFS26HKSJjIu5wB61PBMvcO-gKfv6Ds7JBM9TeQXkw) publications.
+- INPUT
+- Additional Plugin: Wavelet_A_trou that must be copied in your FIJI/plugin folder and FAST4DReg](https://imagej.net/plugins/fast4dreg)
+![SiCE FRAPanalysis](FRAPanalyssis)
 ### RootGravi
 [SiCE RootGravi](RootGravi)
 ### ToolBox
@@ -33,7 +36,7 @@ types and plant species.
 ### FastRed
 This Fiji macro helps analysis Arabidopsis T-DNA transformed segregation with the [fast red selection](https://pubmed.ncbi.nlm.nih.gov/19891705/).The technology is based on the expression of a fluorescent co-dominant screenable marker FAST, under the control of a seed-specific promoter.The FAST marker harbors a fusion gene encoding either GFP or RFP with an oil body membrane protein that is prominent in seeds.
 
- - Additional PLugin: [Distance Based Watershed](https://imagej.net/plugins/distance-transform-watershed )part of the MorphoLibJ library 
+ - Additional PLugin: [Distance Based Watershed](https://imagej.net/plugins/distance-transform-watershed ) part of the MorphoLibJ library 
  - Macro INPUT: Folder containing Brightfield images of the seeds, name of the line ended by "_bf" and the corresponding fluo image (example: 1903-1-01_bf and 1903-1-01 pictures).
   ![](assets/images/FastRedFiles.png)
  - Macro OUTPUT: Table containing Pictures names, number of seeds segmented, number of fluorescent seeds and corresponding ratio and Segregation as following:  
