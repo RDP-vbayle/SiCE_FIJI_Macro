@@ -18,19 +18,34 @@ Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.
 ## Macros
 
  ### SpotDetector 
+
+![SiCE SpotDetector](SpotDetector)
  As described in [Bayle et al.2017](https://bio-protocol.org/pdf/bio-protocol2145.pdf), this macro allows automatic counting of the number of intracellular compartments in Arabidopsis root cells, which can be used for example to study endocytosis
 or secretory trafficking pathways and to compare membrane organization between different genotypes
 or treatments. While developed for Arabidopsis roots, this method can be used on other tissues, cell
 types and plant species.  
-![SiCE SpotDetector](SpotDetector)
  
 ### FRAPanalysis
-This macro helps extracting fluorescence intensities from FRAP acquisitions in Arabidopsis thaliana. This method has been used in [Simon et al 2016](https://www.nature.com/articles/nplants201689) and [PLatre et al. 2019](https://www.science.org/doi/full/10.1126/science.aav9959?casa_token=BfJcTbtNSzIAAAAA%3AX1emsw9qSPBOSUtdSkBRk3tFPjSrMfrZu5W8kFS26HKSJjIu5wB61PBMvcO-gKfv6Ds7JBM9TeQXkw) publications.
+
+![SiCE FRAPanalysis](FRAPanalysis)  
+
+![SiCE_Protocols](SiCE_Protocols)
+
+This macro helps extracting fluorescence intensities from FRAP acquisitions in Arabidopsis thaliana. This method has been used in [Simon et al 2016](https://www.nature.com/articles/nplants201689) and [Platre et al. 2019](https://www.science.org/doi/full/10.1126/science.aav9959?casa_token=BfJcTbtNSzIAAAAA%3AX1emsw9qSPBOSUtdSkBRk3tFPjSrMfrZu5W8kFS26HKSJjIu5wB61PBMvcO-gKfv6Ds7JBM9TeQXkw) publications.
 - INPUT: Folder containing .stk or .nd files corresponding to FRAP time lapse acquisisions.
 - Additional Plugin: [Wavelet_A_trou](FRAPanalysis) that must be copied in your FIJI/plugin folder and needed for root segmentation and [FAST4DReg](https://imagej.net/plugins/fast4dreg) plugin requested for XY drift correction.
 - OUTPUT: Table containing Fluorescence intensity measuremennts for control and bleached ROIs.
 1. Parameters selection: 
  <img src="assets/images/FRAP_parameters.png" width="300">
+ 
+ | Parameter | How to setup | Info | 
+| :--------------- |:---------------:| -----:|
+| FRAP zone lenght  |  Diameter of the bleached region during acquisition | Needed for  Bleached ROI segmentation and Measurement ROIs selection |
+| Membrane thickness  | Measure roughly membrane thickness |  Needed for Measurement ROIs |
+| Bleaching Orientation | Depends on your FRAP setup: Lateral-ApicoBasal membranes or Cortical (top view)  |  Needed for proper root reorientation as well as Measurement ROIs selection (Rectangle for Lateral-ApicoBasal , Circular for Cortical|
+| Prebleach Image number  | Depends on your FRAP setup, ideally frame number where the bleaching is maximal          |   Needed to identify bleached ROIs |
+ | Find max proheminence | Depends on your signal noise ratio (higher value for high S/R) | Needed for root segmentation | 
+  | ROIs nb | Depends on your FRAP setup | Needed for aberrant bleached ROIs removal | 
 2. Folder selection.  
 3. Drift correction:  
 FIJI will load timelapse aquisition and make a Z projection. If a drift is observed on the resulting image click the check box, it should be corrected by fast4dreg. If there was a drift in Z, acquisition should be discarded.
@@ -45,10 +60,9 @@ First, the entire root will be segmented and re-oriented (horizontaly if lateral
 &nbsp; &nbsp; &nbsp; &nbsp;
 <img src="assets/images/FRAP_ctrl.png" width="400">
 </p>
-7. Result table: You will obtain a result table containing th
+7. Result table: You will obtain a result table containing the measured in the different ROIs. Each time the Control regions are in the odd columns and Bleached in the even ones. Ex: Mean1 = Ctrl1 values, Mean2 = Bleached 1 values, Mean3 = Ctrl2 values, Mean4 = Bleached 2 values, etc...
+Measurements are made on rectangle selection (FRAP zone lenght * Membrane thickness) or oval selection (Radius holf FRAP zone lenght)
 
-
-![SiCE FRAPanalysis](FRAPanalysis)
 ### RootGravi
 [SiCE RootGravi](RootGravi)
 ### ToolBox
