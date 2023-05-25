@@ -35,11 +35,17 @@ This macro helps extracting fluorescence intensities from FRAP acquisitions in A
 3. Drift correction:  
 FIJI will load timelapse aquisition and make a Z projection. If a drift is observed on the resulting image click the check box, it should be corrected by fast4dreg. If there was a drift in Z, acquisition should be discarded.
 <img src="assets/images/FRAP_drift.png" width="300">
-5. Noise correction: Point Pixel outside Arabidopsis root. Mean pixel intensity will be calculated in a circular region, radius 15 pixels, and subtracted to entire image stack <img src="assets/images/FRAP_Noise.png" width="300">
-6. Root segmentation and bleached ROI detection. First, the entire root will be segmented and re-oriented (horizontaly if lateral mb were bleached or verticaly for apicobasal membranes) prioor to ROI detection. If the nb of bleached area if higher to the one indicated in parameter selections, you will have to remove extra-ROIs manually in the ROI manager.  
-7. Control region selection:  
-<img src="assets/images/FRAP_ctrlBef.png" width="300"><img src="assets/images/FRAP_ctrl.png" width="300">
-8. 
+5. Noise correction:  
+Point Pixel outside Arabidopsis root. Mean pixel intensity will be calculated in a circular region, radius 15 pixels, and subtracted to entire image stack <img src="assets/images/FRAP_Noise.png" width="300">
+6. Root segmentation and bleached ROI detection.  
+First, the entire root will be segmented and re-oriented (horizontaly if lateral mb were bleached or verticaly for apicobasal membranes) prioor to ROI detection. If the nb of bleached area if higher to the one indicated in parameter selections, you will have to remove extra-ROIs manually in the ROI manager.  
+9. 
+10. Control region selection:  
+<p align="center">
+<img src="assets/images/FRAP_ctrlBef.png" width="300"> 
+&nbsp; &nbsp; &nbsp; &nbsp;
+<img src="assets/images/FRAP_ctrl.png" width="300">
+</p>
 
 
 ![SiCE FRAPanalysis](FRAPanalysis)
