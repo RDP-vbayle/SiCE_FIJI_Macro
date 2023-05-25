@@ -27,14 +27,19 @@ types and plant species.
 ### FRAPanalysis
 This macro helps extracting fluorescence intensities from FRAP acquisitions in Arabidopsis thaliana. This method has been used in [Simon et al 2016](https://www.nature.com/articles/nplants201689) and [PLatre et al. 2019](https://www.science.org/doi/full/10.1126/science.aav9959?casa_token=BfJcTbtNSzIAAAAA%3AX1emsw9qSPBOSUtdSkBRk3tFPjSrMfrZu5W8kFS26HKSJjIu5wB61PBMvcO-gKfv6Ds7JBM9TeQXkw) publications.
 - INPUT: Folder containing .stk or .nd files corresponding to FRAP time lapse acquisisions.
-- Additional Plugin: [Wavelet_A_trou](FRAPanalysis) that must be copied in your FIJI/plugin folder and needed for root segementation and [FAST4DReg](https://imagej.net/plugins/fast4dreg) plugin requested for XY drift correction.
+- Additional Plugin: [Wavelet_A_trou](FRAPanalysis) that must be copied in your FIJI/plugin folder and needed for root segmentation and [FAST4DReg](https://imagej.net/plugins/fast4dreg) plugin requested for XY drift correction.
 - OUTPUT: Table containing Fluorescence intensity measuremennts for control and bleached ROIs.
-1. Select parameters: 
+1. Parameters selection: 
  <img src="assets/images/FRAP_parameters.png" width="300">
-2. Select folder
-3. Point Pixel outside Arabidopsis root <img src="assets/images/FRAP_Noise.png" width="300">
-4. If detected nb of bleached area if superior to the one indicated in parameters selections, you will have to remove extra-ROIs.
-5. 
+2. Folder selection.  
+3. Drift correction:  
+FIJI will load timelapse aquisition and make a Z projection. If a drift is observed on the resulting image click the check box, it should be corrected by fast4dreg. If there was a drift in Z, acquisition should be discarded.
+<img src="assets/images/FRAP_drift.png" width="300">
+5. Noise correction: Point Pixel outside Arabidopsis root. Mean pixel intensity will be calculated in a circular region, radius 15 pixels, and subtracted to entire image stack <img src="assets/images/FRAP_Noise.png" width="300">
+6. Root segmentation and bleached ROI detection. First, the entire root will be segmented and re-oriented (horizontaly if lateral mb were bleached or verticaly for apicobasal membranes) prioor to ROI detection. If the nb of bleached area if higher to the one indicated in parameter selections, you will have to remove extra-ROIs manually in the ROI manager.  
+7. Control region selection:  
+<img src="assets/images/FRAP_ctrlBef.png" width="300"><img src="assets/images/FRAP_ctrl.png" width="300">
+8. 
 
 
 ![SiCE FRAPanalysis](FRAPanalysis)
