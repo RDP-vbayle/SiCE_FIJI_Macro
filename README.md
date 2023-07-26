@@ -6,11 +6,11 @@ Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.
 
 ![](http://www.ens-lyon.fr/RDP/local/cache-vignettes/L130xH130/siteon0-1ee2f.jpg?1680013421) ![](http://www.ens-lyon.fr/RDP/SiCE/Home_Fr_files/Sans%20titre%20-%201_1.png)![](assets/images/sice_logo.png)
 ## Quick links
-- [SiCE SpotDetector](###SpotDetector)
-- [SiCE FRAPanalysis](###FRAPanalysis)
-- [SiCE RootGravi](###RootGravi)
+- [SiCE SpotDetector](#spotdetector)
+- [SiCE FRAPanalysis](#frapanalysis)
+- [SiCE RootGravi](#rootgravi)
 - [SiCE ToolBox](#ToolBox)
-- [SiCE FastRed](###FastRed)
+- [SiCE FastRed](#fastRed)
 - [SeedDev_Curvature](#Curvature)
 - [SeedDev_Immuno](#Immuno)
 - [SeedDev_Nuclei](#Nuclei)
