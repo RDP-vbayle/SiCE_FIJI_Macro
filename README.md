@@ -10,14 +10,14 @@ Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.
 - [SiCE FRAPanalysis](#FRAPanalysis)
 - [SiCE RootGravi](#RootGravi)
 - [SiCE ToolBox](#ToolBox)
--  [SiCE FastRed](#FastRed)
+- [SiCE FastRed](#FastRed)
 - [SeedDev_Curvature](#Curvature)
 - [SeedDev_Immuno](#Immuno)
 - [SeedDev_Nuclei](#Nuclei)
 
 ## Macros
 
- ### SpotDetector 
+ #SpotDetector 
 
 ![SiCE SpotDetector](SpotDetector)
  As described in [Bayle et al.2017](https://bio-protocol.org/pdf/bio-protocol2145.pdf), this macro allows automatic counting of the number of intracellular compartments in Arabidopsis root cells, which can be used for example to study endocytosis
@@ -25,7 +25,7 @@ or secretory trafficking pathways and to compare membrane organization between d
 or treatments. While developed for Arabidopsis roots, this method can be used on other tissues, cell
 types and plant species.  
  
-### FRAPanalysis
+#FRAPanalysis
 
 Acquisition protocol (on our system): ![SiCE_Protocols](FRAPanalysis/Protocol_FRAP_V2.docx)
 Macro: ![SiCE FRAPanalysis](FRAPanalysis)  
@@ -62,7 +62,7 @@ First, the entire root will be segmented and re-oriented (horizontaly if lateral
 7. Result table: You will obtain a result table containing the measured in the different ROIs. Each time the Control regions are in the odd columns and Bleached in the even ones. Ex: Mean1 = Ctrl1 values, Mean2 = Bleached 1 values, Mean3 = Ctrl2 values, Mean4 = Bleached 2 values, etc...
 Measurements are made on rectangle selection (FRAP zone lenght * Membrane thickness) or oval selection (Radius half FRAP zone lenght)
 
-### RootGravi
+#RootGravi
 [SiCE RootGravi](RootGravi)
 This Fiji macro helps analysis Arabidopsis seedlings roots response to gravity. 
 - INPUT should be timelapse acquisitions, in our case acquired from [SPIRO] (https://www.biorxiv.org/content/10.1101/2021.03.15.435343v3). Here you can find our protocol ![protocol](RootGravi) and a DataSet(https://www.dropbox.com/scl/fi/7a72j1mtj9cquuzuh5oe2/MacroGraviTestData.tif?rlkey=73erfbs4ptkbqx7two1oavsxg&dl=0).
@@ -114,7 +114,8 @@ Two angles are measured with the vertical ray. One using Root Tip T0 and at Curr
 
 ### ToolBox
 [SiCE ToolBox](ToolBox)
-### FastRed
+
+#FastRed
 This Fiji macro helps analysis Arabidopsis T-DNA transformed segregation with the [fast red selection](https://pubmed.ncbi.nlm.nih.gov/19891705/).The technology is based on the expression of a fluorescent co-dominant screenable marker FAST, under the control of a seed-specific promoter.The FAST marker harbors a fusion gene encoding either GFP or RFP with an oil body membrane protein that is prominent in seeds.
 
  - Additional Plugin: [Distance Based Watershed](https://imagej.net/plugins/distance-transform-watershed ) part of the MorphoLibJ library 
