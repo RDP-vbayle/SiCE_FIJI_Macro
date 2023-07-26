@@ -6,7 +6,7 @@ Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.
 
 ![](http://www.ens-lyon.fr/RDP/local/cache-vignettes/L130xH130/siteon0-1ee2f.jpg?1680013421) ![](http://www.ens-lyon.fr/RDP/SiCE/Home_Fr_files/Sans%20titre%20-%201_1.png)![](assets/images/sice_logo.png)
 ## Quick links
-- [SiCE SpotDetector](#SpotDetector )
+- [SiCE SpotDetector](#SpotDetector)
 - [SiCE FRAPanalysis](#FRAPanalysis)
 - [SiCE RootGravi](#RootGravi)
 - [SiCE ToolBox](#ToolBox)
@@ -62,7 +62,7 @@ First, the entire root will be segmented and re-oriented (horizontaly if lateral
 7. Result table: You will obtain a result table containing the measured in the different ROIs. Each time the Control regions are in the odd columns and Bleached in the even ones. Ex: Mean1 = Ctrl1 values, Mean2 = Bleached 1 values, Mean3 = Ctrl2 values, Mean4 = Bleached 2 values, etc...
 Measurements are made on rectangle selection (FRAP zone lenght * Membrane thickness) or oval selection (Radius half FRAP zone lenght)
 
-### RootGravi
+## #RootGravi
 [SiCE RootGravi](RootGravi)
 This Fiji macro helps analysis Arabidopsis seedlings roots response to gravity. 
 - INPUT should be timelapse acquisitions, in our case acquired from [SPIRO] (https://www.biorxiv.org/content/10.1101/2021.03.15.435343v3). Here you can find our protocol ![protocol](RootGravi) and a DataSet(https://www.dropbox.com/scl/fi/7a72j1mtj9cquuzuh5oe2/MacroGraviTestData.tif?rlkey=73erfbs4ptkbqx7two1oavsxg&dl=0).
