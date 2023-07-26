@@ -60,20 +60,63 @@ First, the entire root will be segmented and re-oriented (horizontaly if lateral
 <img src="assets/images/FRAP_ctrl.png" width="400">
 </p>
 7. Result table: You will obtain a result table containing the measured in the different ROIs. Each time the Control regions are in the odd columns and Bleached in the even ones. Ex: Mean1 = Ctrl1 values, Mean2 = Bleached 1 values, Mean3 = Ctrl2 values, Mean4 = Bleached 2 values, etc...
-Measurements are made on rectangle selection (FRAP zone lenght * Membrane thickness) or oval selection (Radius holf FRAP zone lenght)
+Measurements are made on rectangle selection (FRAP zone lenght * Membrane thickness) or oval selection (Radius half FRAP zone lenght)
 
 ### RootGravi
 [SiCE RootGravi](RootGravi)
-This Fiji macro helps analysis Arabidopsis seedlings roots response to gravity. INPUT should be timelapse acquisitions, in our case acquired from [SPIRO] (https://www.biorxiv.org/content/10.1101/2021.03.15.435343v3). Here you can find our protocol ![protocol](RootGravi) and an example ![DataSet](assets/dataset/MacroGraviTestData.tif)
+This Fiji macro helps analysis Arabidopsis seedlings roots response to gravity. 
+- INPUT should be timelapse acquisitions, in our case acquired from [SPIRO] (https://www.biorxiv.org/content/10.1101/2021.03.15.435343v3). Here you can find our protocol ![protocol](RootGravi) and a ![DataSet](https://www.dropbox.com/scl/fi/7a72j1mtj9cquuzuh5oe2/MacroGraviTestData.tif?rlkey=73erfbs4ptkbqx7two1oavsxg&dl=0).
+- Additional Plugins: [StagReg](http://bigwww.epfl.ch/thevenaz/stackreg/) for Stack realignment. [Analyse Skeleton](https://imagej.net/plugins/analyze-skeleton/).
+- OUTPUT: Table containing Extracted coordinates of root tips, Angles measured and root growth for all time points.
+1. Open you dataset in FIJI
+<img src="assets/images/MacroGraviInput.png" width="200">
 
+3. Run the macro
+4. Parameters selection: 
+<img src="assets/images/MacroGraviParam.png" width="200">
 
+| Parameter | Infos |
+| :--------------- | ---------------:| 
+| Min Root size | Minimal root size (pixels^2) for object segmentation |
+| Rolling ball size  | Size of the radius for [Rolling Ball Background Subtraction](https://imagej.net/plugins/rolling-ball-background-subtraction)|
+| Min and Max DoG Sigmas | Sigmas used for Differential of Gaussian filtering | 
+| Dist for T0 | Distance in pixels from the root tip at T0 to measure initial root orientation | 
+| Dist for angle measures |  Distance in pixels from the root tip to measure current angle (depends on the time frame used during acquisition) |
+
+5. Crop the aerial part. Adjust the rectangle selection to remove aerial part. click OK.
+<img src="assets/images/MacroGraviCropShot.png" width="400">
+
+6. T0 root segmentation validation. If aberrant objects have been segmented, simply remove those from the ROImanager. Click OK.
+<img src="assets/images/MacroGraviFirstCheck.png" width="400">
+
+7. Last time point root segmentation validation. Check that all roots are still well segmented. Click OK.
+<img src="assets/images/MacroGraviLastCheck.png" width="400">
+
+8. Result summary table contains X & Y root tips coordinates and Root angle at T0 and coordinates and angles for each time points.
+
+<img src="assets/images/MacroGraviTable.png" width="400">
+
+Two angles are measured with the vertical ray. One using Root Tip T0 and at Current timepoint as a second ray or between Current timepoint and a point at a distance indicated in the parameters.
+
+<img src="assets/images/MacroGraviAngles.png" width="300">
+
+- Troubleshooting:
+  
+| Step | Solution |
+| :--------------- | ---------------:| 
+| Ralignment | StagReg cannot properly find the objects to correct the shift - Adjust Rolling ball size parameter |
+| Step 6 | Roots are not well segmented (Roots are not detected) - Adjust Minimal root size parameter |
+| Step 6 | Roots are not well segmented (aberrant size and shape) - Adjust Rolling ball to properly remove background and Min & Max Sigmas |
+| Step 7 | Additional object become fused with root in the binary image (see image below) - Use the Oval tool to draw a selection on the extra region and do FIJI>Edit>Clean and process to all images |
+
+<img src="assets/images/MacroGraviCleaning.png" width="300">
 
 ### ToolBox
 [SiCE ToolBox](ToolBox)
 ### FastRed
 This Fiji macro helps analysis Arabidopsis T-DNA transformed segregation with the [fast red selection](https://pubmed.ncbi.nlm.nih.gov/19891705/).The technology is based on the expression of a fluorescent co-dominant screenable marker FAST, under the control of a seed-specific promoter.The FAST marker harbors a fusion gene encoding either GFP or RFP with an oil body membrane protein that is prominent in seeds.
 
- - Additional PLugin: [Distance Based Watershed](https://imagej.net/plugins/distance-transform-watershed ) part of the MorphoLibJ library 
+ - Additional Plugin: [Distance Based Watershed](https://imagej.net/plugins/distance-transform-watershed ) part of the MorphoLibJ library 
  - Macro INPUT: Folder containing Brightfield images of the seeds, name of the line ended by "_bf" and the corresponding fluo image (example: 1903-1-01_bf and 1903-1-01 pictures).
   ![](assets/images/FastRedFiles.png)
  - Macro OUTPUT: Table containing Pictures names, number of seeds segmented, number of fluorescent seeds and corresponding ratio and Segregation as following:  
