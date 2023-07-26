@@ -27,8 +27,8 @@ types and plant species.
  
 ### FRAPanalysis
 
-Acquisition protocol (on our system): ![SiCE_Protocols](github.com/RDP-vbayle/SiCE_Protocols)
-Macro:![SiCE FRAPanalysis](FRAPanalysis)  
+Acquisition protocol (on our system): ![SiCE_Protocols](FRAPanalysis/Protocol_FRAP_V2.docx)
+Macro: ![SiCE FRAPanalysis](FRAPanalysis)  
 
 This macro helps extracting fluorescence intensities from FRAP acquisitions in Arabidopsis thaliana. This method has been used in [Simon et al 2016](https://www.nature.com/articles/nplants201689) and [Platre et al. 2019](https://www.science.org/doi/full/10.1126/science.aav9959?casa_token=BfJcTbtNSzIAAAAA%3AX1emsw9qSPBOSUtdSkBRk3tFPjSrMfrZu5W8kFS26HKSJjIu5wB61PBMvcO-gKfv6Ds7JBM9TeQXkw) publications.
 - INPUT: Folder containing .stk or .nd files corresponding to FRAP time lapse acquisisions.
@@ -64,6 +64,10 @@ Measurements are made on rectangle selection (FRAP zone lenght * Membrane thickn
 
 ### RootGravi
 [SiCE RootGravi](RootGravi)
+This Fiji macro helps analysis Arabidopsis seedlings roots response to gravity. INPUT should be timelapse acquisitions, in our case acquired from [SPIRO] (https://www.biorxiv.org/content/10.1101/2021.03.15.435343v3). Here you can find our protocol ![protocol](RootGravi) and an example ![DataSet](assets/dataset/MacroGraviTestData.tif)
+
+
+
 ### ToolBox
 [SiCE ToolBox](ToolBox)
 ### FastRed
