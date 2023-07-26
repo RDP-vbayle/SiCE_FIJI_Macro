@@ -72,7 +72,8 @@ This Fiji macro helps analysis Arabidopsis seedlings roots response to gravity.
 <img src="assets/images/MacroGraviInput.png" width="200">
 
 3. Run the macro
-4. Parameters selection: 
+4. Parameters selection:
+   
 <img src="assets/images/MacroGraviParam.png" width="200">
 
 | Parameter | Infos |
