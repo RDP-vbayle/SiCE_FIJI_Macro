@@ -8,7 +8,6 @@ roiManager("reset");
 run("Remove Overlay");
 setOption("ExpandableArrays", true);
 run("Options...", "iterations=1 count=1 black do=Nothing");
-Size= 500;
 run("Set Measurements...", "area mean standard min center bounding fit shape integrated skewness display redirect=None decimal=5");
 
 ///get scale:
@@ -20,13 +19,15 @@ run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 
 	Dialog.create("SiCE MacroGravi");
 	Dialog.addMessage("		Cell segmentation parameters: \n ");
-	Dialog.addNumber("Rolling ball size",5, 1,2, " ");
-	Dialog.addNumber("Min DoG sigma",2, 1,2, "	");
-	Dialog.addNumber("Max DoG sigma",4, 1,2, "	");
-	Dialog.addNumber("Dist for T0",10, 0,2, "pixel(s)");
-	Dialog.addNumber("Dist for angle measures",10, 0,2, "pixel(s)");
+	Dialog.addNumber("Min Root size",500, 0,4, "pixels^2");
+	Dialog.addNumber("Rolling ball size",5, 0,3, " ");
+	Dialog.addNumber("Min DoG sigma",2, 1,3, "	");
+	Dialog.addNumber("Max DoG sigma",4, 1,3, "	");
+	Dialog.addNumber("Dist for T0",10, 0,3, "pixel(s)");
+	Dialog.addNumber("Dist for angle measures",10, 0,3, "pixel(s)");
 	
 	Dialog.show();
+	Size= Dialog.getNumber();
 	bck = Dialog.getNumber();
 	Min = Dialog.getNumber();
 	Max = Dialog.getNumber();
