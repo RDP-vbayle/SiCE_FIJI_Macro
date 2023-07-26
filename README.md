@@ -85,13 +85,13 @@ This Fiji macro helps analysis Arabidopsis seedlings roots response to gravity.
 | Dist for angle measures |  Distance in pixels from the root tip to measure current angle (depends on the time frame used during acquisition) |
 
 5. Crop the aerial part. Adjust the rectangle selection to remove aerial part. click OK.
-<img src="assets/images/MacroGraviCropShot.png" width="400">
+<img src="assets/images/MacroGraviCropShot.png" width="500">
 
 6. T0 root segmentation validation. If aberrant objects have been segmented, simply remove those from the ROImanager. Click OK.
-<img src="assets/images/MacroGraviFirstCheck.png" width="400">
+<img src="assets/images/MacroGraviFirstCheck.png" width="500">
 
 7. Last time point root segmentation validation. Check that all roots are still well segmented. Click OK.
-<img src="assets/images/MacroGraviLastCheck.png" width="400">
+<img src="assets/images/MacroGraviLastCheck.png" width="500">
 
 8. Result summary table contains X & Y root tips coordinates and Root angle at T0 and coordinates and angles for each time points.
 
