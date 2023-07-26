@@ -105,7 +105,7 @@ Two angles are measured with the vertical ray. One using Root Tip T0 and at Curr
   
 | Step | Solution |
 | :--------------- | ---------------:| 
-| Ralignment | StagReg cannot properly find the objects to correct the shift - Adjust Rolling ball size parameter |
+| Realignment | StagReg cannot properly find the objects to correct the shift - Adjust Rolling ball size parameter |
 | Step 6 | Roots are not well segmented (Roots are not detected) - Adjust Minimal root size parameter |
 | Step 6 | Roots are not well segmented (aberrant size and shape) - Adjust Rolling ball to properly remove background and Min & Max Sigmas |
 | Step 7 | Additional object become fused with root in the binary image (see image below) - Use the Oval tool to draw a selection on the extra region and do FIJI>Edit>Clean and process to all images |
