@@ -20,16 +20,16 @@ run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 
 	Dialog.create("SiCE MacroGravi");
 	Dialog.addMessage("		Cell segmentation parameters: \n ");
+	Dialog.addNumber("Rolling ball size",5, 1,2, " ");
 	Dialog.addNumber("Min DoG sigma",2, 1,2, "	");
 	Dialog.addNumber("Max DoG sigma",4, 1,2, "	");
-	Dialog.addNumber("Rolling ball size",5, 1,2, " ");
 	Dialog.addNumber("Dist for T0",10, 0,2, "pixel(s)");
 	Dialog.addNumber("Dist for angle measures",10, 0,2, "pixel(s)");
 	
 	Dialog.show();
+	bck = Dialog.getNumber();
 	Min = Dialog.getNumber();
 	Max = Dialog.getNumber();
-	bck = Dialog.getNumber();
 	DistT0 = Dialog.getNumber();
 	DistTk=  Dialog.getNumber();
 	
