@@ -2,22 +2,22 @@
 
 #  Welcome to SiCE_FIJI_Macro repository!
 
-Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.ens-lyon.fr/RDP/SiCE/Home.html). As there is not website to directly install and update directly from FIJI you will have to download .ijm files and add them to the corresponding directories in your Fiji/ImageJ installation, or simply drag and drop on FIJI toolbar.
+Hi! You will find here macros for FIJI developped in the [SiCE Team](http://www.ens-lyon.fr/RDP/SiCE/Home.html). As there is not website to directly install and update from FIJI you will have to download .ijm files and add them to the corresponding directories in your Fiji/ImageJ installation, or simply drag and drop on FIJI toolbar.
 
 ![](http://www.ens-lyon.fr/RDP/local/cache-vignettes/L130xH130/siteon0-1ee2f.jpg?1680013421) ![](http://www.ens-lyon.fr/RDP/SiCE/Home_Fr_files/Sans%20titre%20-%201_1.png)![](assets/images/sice_logo.png)
 ## Quick links
-- [SiCE SpotDetector](#SpotDetector )
-- [SiCE FRAPanalysis](#FRAPanalysis)
-- [SiCE RootGravi](#RootGravi)
+- [SiCE SpotDetector](#spotdetector)
+- [SiCE FRAPanalysis](#frapanalysis)
+- [SiCE RootGravi](#rootgravi)
 - [SiCE ToolBox](#ToolBox)
--  [SiCE FastRed](#FastRed)
+- [SiCE FastRed](#fastred)
 - [SeedDev_Curvature](#Curvature)
 - [SeedDev_Immuno](#Immuno)
 - [SeedDev_Nuclei](#Nuclei)
 
 ## Macros
 
- ### SpotDetector 
+### SpotDetector 
 
 ![SiCE SpotDetector](SpotDetector)
  As described in [Bayle et al.2017](https://bio-protocol.org/pdf/bio-protocol2145.pdf), this macro allows automatic counting of the number of intracellular compartments in Arabidopsis root cells, which can be used for example to study endocytosis
@@ -72,8 +72,9 @@ This Fiji macro helps analysis Arabidopsis seedlings roots response to gravity.
 <img src="assets/images/MacroGraviInput.png" width="200">
 
 3. Run the macro
-4. Parameters selection: 
-<img src="assets/images/MacroGraviparam.png" width="200">
+4. Parameters selection:
+   
+<img src="assets/images/MacroGraviParam.png" width="200">
 
 | Parameter | Infos |
 | :--------------- | ---------------:| 
@@ -84,13 +85,13 @@ This Fiji macro helps analysis Arabidopsis seedlings roots response to gravity.
 | Dist for angle measures |  Distance in pixels from the root tip to measure current angle (depends on the time frame used during acquisition) |
 
 5. Crop the aerial part. Adjust the rectangle selection to remove aerial part. click OK.
-<img src="assets/images/MacroGraviCropShot.png" width="400">
+<img src="assets/images/MacroGraviCropShot.png" width="500">
 
 6. T0 root segmentation validation. If aberrant objects have been segmented, simply remove those from the ROImanager. Click OK.
-<img src="assets/images/MacroGraviFirstCheck.png" width="400">
+<img src="assets/images/MacroGraviFirstCheck.png" width="500">
 
 7. Last time point root segmentation validation. Check that all roots are still well segmented. Click OK.
-<img src="assets/images/MacroGraviLastCheck.png" width="400">
+<img src="assets/images/MacroGraviLastCheck.png" width="500">
 
 8. Result summary table contains X & Y root tips coordinates and Root angle at T0 and coordinates and angles for each time points.
 
@@ -104,15 +105,16 @@ Two angles are measured with the vertical ray. One using Root Tip T0 and at Curr
   
 | Step | Solution |
 | :--------------- | ---------------:| 
-| Ralignment | StagReg cannot properly find the objects to correct the shift - Adjust Rolling ball size parameter |
+| Realignment | StagReg cannot properly find the objects to correct the shift - Adjust Rolling ball size parameter |
 | Step 6 | Roots are not well segmented (Roots are not detected) - Adjust Minimal root size parameter |
 | Step 6 | Roots are not well segmented (aberrant size and shape) - Adjust Rolling ball to properly remove background and Min & Max Sigmas |
 | Step 7 | Additional object become fused with root in the binary image (see image below) - Use the Oval tool to draw a selection on the extra region and do FIJI>Edit>Clean and process to all images |
 
 <img src="assets/images/MacroGraviCleaning.png" width="300">
 
-### ToolBox
+###ToolBox
 [SiCE ToolBox](ToolBox)
+
 ### FastRed
 This Fiji macro helps analysis Arabidopsis T-DNA transformed segregation with the [fast red selection](https://pubmed.ncbi.nlm.nih.gov/19891705/).The technology is based on the expression of a fluorescent co-dominant screenable marker FAST, under the control of a seed-specific promoter.The FAST marker harbors a fusion gene encoding either GFP or RFP with an oil body membrane protein that is prominent in seeds.
 
