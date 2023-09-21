@@ -142,7 +142,8 @@ This method has been used in [Creff et al 2023](https://www.nature.com/articles/
 - ![SeedDev_Nuclei](Nuclei)
 This method has been used in [Creff et al 2023](https://www.nature.com/articles/s41467-022-35542-5) see material  & method.
 
- ### Misc...
+ ### Misc:
+ ![Various Macro](misc) 
 
 
 
