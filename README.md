@@ -69,7 +69,8 @@ This Fiji macro helps analysis Arabidopsis seedlings roots response to gravity.
 - INPUT should be timelapse acquisitions, in our case acquired from [SPIRO] (https://www.biorxiv.org/content/10.1101/2021.03.15.435343v3). Here you can find our ![protocol](RootGravi) and a DataSet(https://www.dropbox.com/scl/fi/7a72j1mtj9cquuzuh5oe2/MacroGraviTestData.tif?rlkey=73erfbs4ptkbqx7two1oavsxg&dl=0).
 - Additional Plugins: [StagReg](http://bigwww.epfl.ch/thevenaz/stackreg/) for Stack realignment. [Analyse Skeleton](https://imagej.net/plugins/analyze-skeleton/).
 - OUTPUT: Table containing Extracted coordinates of root tips, Angles measured and root growth for all time points.
-1. Open you dataset in FIJI
+1. Pre-Processing: In our case some frames shows "Tilting", meaning the position on the spiro is not facing the camera and there is a little shift. Here is a macro to correct this: [SiCE RootGravi](ShiftCorrection230925). Import the time lapse on FIJI File>Import. Launch the macro. Save the different rows of seedlings separately.
+2. Open you dataset in FIJI
 <img src="assets/images/MacroGraviInput.png" width="200">
 
 3. Run the macro
