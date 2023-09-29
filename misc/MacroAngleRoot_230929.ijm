@@ -1,12 +1,11 @@
-///////Macro pour la quantification de l'angle entre la MB supérieure et la membrane latérale.
-
+///////Macro for feature extractiono of Root tissues (mb size, angles, etc...)
 ///get scale:
 getPixelSize (unit, pixelWidth, pixelHeight);
 if (unit!="pixel"){
 xPIX=pixelWidth;}
 else exit ("No calib");
 
-///Creation du tableau de résultat
+///Result table creation
 	title1 = "[Result summary:]";
 	f=title1;
 	run("New... ", "name="+title1+" type=Table");
@@ -44,12 +43,10 @@ title=getTitle();
 	close("Z");
 	selectWindow(title);
 	run("Rotate... ", "angle="+angl+" grid=1 interpolation=Bilinear fill stack");
+	run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 
 
-run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
-
-
-////choix des paramètres
+////Parameter selection
 
 	Dialog.create("SiCE MacroRoot");
 	Dialog.addMessage("  \n ");
@@ -178,7 +175,7 @@ setBatchMode(true);
 
 for(l=0; l<=nROIs-1; l++)
 			{
-		// Mesure centroid and area
+// Mesure centroid and area
 				roiManager("Select", l);
 				run("Measure");
 				Xcent[l]=  getResult("X",l);
@@ -187,8 +184,8 @@ for(l=0; l<=nROIs-1; l++)
 			}
 		run("Clear Results");
 
-		// Cell file identification
-		///Cell nb sorting according X centroid
+// Cell file identification
+///Cell nb sorting according X centroid
 			sortedXcent = Array.copy(Xcent);
 			Array.sort(sortedXcent);
 			rankPosArr = Array.rankPositions(Xcent);
@@ -245,7 +242,6 @@ print(centDist);
 
 for(l=0; l<=nROIs-1; l++)
 	{
-
 		x=newArray();
 		y=newArray();
 
