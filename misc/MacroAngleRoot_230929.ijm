@@ -38,7 +38,7 @@ title=getTitle();
 	setOption("BlackBackground", true);
 	run("Convert to Mask");
 	run("Fill Holes");
-	doWand(512, 512);
+	doWand(width/2, height/2);
 	run("Measure");
 	angl= -90+getResult("Angle", 0);
 	close("Z");
