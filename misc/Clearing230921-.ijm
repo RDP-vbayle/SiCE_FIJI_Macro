@@ -61,7 +61,7 @@ for (m=1; m<FileNb; m++) {
 					roiManager("rename", "Seed");
 					run("Select None");
 					roiManager("Show None");
-
+				do {
 				waitForUser("Draw Albumen contour");
 				IsROI=selectionType();	
 				} while (IsROI ==-1);
