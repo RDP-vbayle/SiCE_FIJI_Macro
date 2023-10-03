@@ -29,7 +29,7 @@ FileNb = parseInt(substring(list1[list1.length-1], indexOf(list1[list1.length-1]
 
 /// Loop beginning
 
-for (m=1; m<FileNb; m++) {
+for (m=1; m<FileNb+1; m++) {
 					
 				showProgress(m+1, FileNb);
 				File.openSequence(dir1, " filter=Seed"+m+"-");
@@ -67,7 +67,6 @@ for (m=1; m<FileNb; m++) {
 			
 				Dialog.create("Embryo shape selection:");
 				Dialog.addChoice(" ", newArray("Bent","Torpedo","Heart","Mis-oriented", "Compact","Delayed","Brown", "Undetermined"));
-				Dialog.addMessage("select ROIs and press space each time \n ");
 				Dialog.show();				
 				stage = Dialog.getChoice();		
 	
