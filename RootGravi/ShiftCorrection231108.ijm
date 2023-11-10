@@ -1,8 +1,18 @@
 // Shift correction macro
 // INPUT imported stack from Spiro acquisitions
+dbg=false;
+Range=7;
+Var=100;
+n=0;
 
 title=getTitle();
+
 setBatchMode(true);
+
+if (dbg==true) {
+setBatchMode(false);	
+}
+
 setOption("ExpandableArrays", true);
 getDimensions(width, height, channels, slices, frames);
 
@@ -14,58 +24,64 @@ getDimensions(width, height, channels, slices, frames);
 	run("Crop");
 	shift=newArray();
 	shiftBis=newArray();
-	n=0;
 	getDimensions(width, height, channels, slices, frames);
 	
-	findBoundaries(0,0,width,1);
+	findBoundaries(0,0,width,1,Var);
 	getSelectionCoordinates(xpoints, ypoints);
 	close("Kymograph-1");
 	DayBound=xpoints[0];
-	findBoundaries(0,0,3,height);
+	findBoundaries(0,0,3,height,Var);
 	getSelectionCoordinates(xpoints, ypoints);
 	Array.getStatistics(ypoints, min, max, mean, stdDev);
 	close("Kymograph-1");
-//run("Select None");
-//makePoint(0,min);
-//waitForUser("dark");
+if (dbg==true) {
+run("Select None");
+makePoint(0,min);
+waitForUser("dark");
+}
 		ypoint=min;
 	if (getPixel(0, min)>100) {
 		ypoint=min+1;
 	}
-	findBoundaries(0,ypoint,width,1);
+	findBoundaries(0,ypoint,width,1, Var);
 	getSelectionCoordinates(xpoints, ypoints);
 	Array.getStatistics(xpoints, min, max, mean, stdDev);
 	close("Kymograph-1");
-//run("Select None");
-//makePoint(min,ypoint);
-//waitForUser("dark");
 	NightBound=min;
-	Range=7;
+if (dbg==true) {
+run("Select None");
+makePoint(min,ypoint);
+waitForUser("dark");
+}
+	
 print(DayBound+"-"+NightBound+"-"+ypoint);
 	
 ///Detect shifts and store Frame nb in shift array
 
 	for (i = 0; i < height; i++) {
 		if (getPixel(0, i)>100) {
-	findBoundaries(0,i,width,1);
+	findBoundaries(0,i,width,1,Var);
 	getSelectionCoordinates(xpoints, ypoints);
 	Array.getStatistics(xpoints, min, max, mean, stdDev);
-	
-//run("Select None");
-//makePoint(min, i);
-//waitForUser(i);
+if (dbg==true) {	
+run("Select None");
+makePoint(min, i);
+waitForUser(i);
+}
 	close("Kymograph-1");
 	CurBound=min;
 	Diff=DayBound-CurBound;
 		}
 		else {
-	findBoundaries(0,i,width,1);
+	findBoundaries(0,i,width,1,Var);
 	getSelectionCoordinates(xpoints, ypoints);
 	Array.getStatistics(xpoints, min, max, mean, stdDev);
 	close("Kymograph-1");
-//run("Select None");
-//makePoint(min, i);
-//waitForUser(i);
+if (dbg==true) {	
+run("Select None");
+makePoint(min, i);
+waitForUser(i);
+}
 	CurBound=min;
 	Diff=NightBound-CurBound;
 		}
@@ -102,11 +118,11 @@ for (i = 0; i < shift.length; i++) {
 
 run("Rotate 90 Degrees Right");
 
-function findBoundaries(X0, Y0, X,Y) { 
+function findBoundaries(X0, Y0, X,Y,Var) { 
 	makeRectangle(X0, Y0, X, Y);
 	run("Duplicate...", " ");
 	run("Enhance Contrast...", "saturated=5 normalize");
-	run("Variance...", "radius=5");
+	run("Variance...", "radius="+Var+"");
 	run("8-bit");
 	run("Find Maxima...", "prominence=100 output=[Point Selection]");
 }
