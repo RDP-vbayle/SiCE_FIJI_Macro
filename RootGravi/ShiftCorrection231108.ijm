@@ -50,10 +50,11 @@ print(DayBound+"-"+NightBound+"-"+ypoint);
 	findBoundaries(0,i,width,1);
 	getSelectionCoordinates(xpoints, ypoints);
 	Array.getStatistics(xpoints, min, max, mean, stdDev);
-	close("Kymograph-1");
+	
 //run("Select None");
 //makePoint(min, i);
 //waitForUser(i);
+	close("Kymograph-1");
 	CurBound=min;
 	Diff=DayBound-CurBound;
 		}
@@ -107,6 +108,6 @@ function findBoundaries(X0, Y0, X,Y) {
 	run("Enhance Contrast...", "saturated=5 normalize");
 	run("Variance...", "radius=5");
 	run("8-bit");
-	run("Find Maxima...", "prominence=50 output=[Point Selection]");
+	run("Find Maxima...", "prominence=100 output=[Point Selection]");
 }
 
