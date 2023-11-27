@@ -70,7 +70,7 @@ for (m=1; m<FileNb+1; m++) {
 					run("Select None");
 					roiManager("Show All");
 /// Stage selection
-			
+
 				Dialog.create("Embryo shape selection:");
 				Dialog.addChoice(" ", newArray("Bent","Torpedo","Heart","Mis-oriented", "Compact","Delayed","Brown", "Undetermined"));
 				Dialog.show();				
@@ -128,21 +128,3 @@ for (m=1; m<FileNb+1; m++) {
 				roiManager("Reset");
 				run("Clear Results");
 			}
-
-
-function automatSeg( name)
-{
-	run("8-bit");
-	run("Morphological Filters", "operation=[Black Top Hat] element=Disk radius=50");
-	setAutoThreshold("Huang dark");
-	setOption("BlackBackground", true);
-	run("Convert to Mask");
-	run("Fill Holes");
-	run("Erode");
-	run("Erode");
-	run("Erode");
-	run("Erode");
-	run("Dilate");
-	run("Dilate");
-	setTool("wand");
-	}
