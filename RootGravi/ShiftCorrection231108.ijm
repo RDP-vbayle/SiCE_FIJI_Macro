@@ -30,14 +30,14 @@ getDimensions(width, height, channels, slices, frames);
 	getSelectionCoordinates(xpoints, ypoints);
 	close("Kymograph-1");
 	DayBound=xpoints[0];
-	findBoundaries(0,0,3,height,Var);
+	findBoundaries(0,0,3,height,10);
 	getSelectionCoordinates(xpoints, ypoints);
 	Array.getStatistics(ypoints, min, max, mean, stdDev);
 	close("Kymograph-1");
 if (dbg==true) {
 run("Select None");
 makePoint(0,min);
-waitForUser("dark");
+waitForUser("Y dark");
 }
 		ypoint=min;
 	if (getPixel(0, min)>100) {
@@ -51,7 +51,7 @@ waitForUser("dark");
 if (dbg==true) {
 run("Select None");
 makePoint(min,ypoint);
-waitForUser("dark");
+waitForUser("X dark");
 }
 	
 print(DayBound+"-"+NightBound+"-"+ypoint);
@@ -89,22 +89,19 @@ print(i+"-"+CurBound);
 print(i+"-"+Diff);
 		if (abs(Diff)>Range){	
 		shift[n]=i;
-		shiftBis[n]=Diff;
+		if (Diff<0) {
+		shiftBis[n]=Diff-10;	
+		}
+		else {
+		shiftBis[n]=Diff+10;	
+		}
 		n++;
 		}
 		}		
 		
 Array.print(shift);	
 Array.print(shiftBis);
-Array.getStatistics(shiftBis, min, max, mean, stdDev);
-if (mean>0) {
-	Shift=max+10;
-}
-else {
-	Shift=min-10;
-}
 
-print(Shift);
 selectWindow(title);
 close("\\Others");
 
@@ -112,9 +109,8 @@ close("\\Others");
 
 for (i = 0; i < shift.length; i++) {
 	setSlice(shift[i]+1);
-	run("Translate...", "x="+Shift+" y=0 interpolation=None slice");
+	run("Translate...", "x="+shiftBis[n]+" y=0 interpolation=None slice");
 	}
-
 
 run("Rotate 90 Degrees Right");
 
