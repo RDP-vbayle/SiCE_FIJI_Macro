@@ -109,7 +109,7 @@ close("\\Others");
 
 for (i = 0; i < shift.length; i++) {
 	setSlice(shift[i]+1);
-	run("Translate...", "x="+shiftBis[n]+" y=0 interpolation=None slice");
+	run("Translate...", "x="+shiftBis[i]+" y=0 interpolation=None slice");
 	}
 
 run("Rotate 90 Degrees Right");
