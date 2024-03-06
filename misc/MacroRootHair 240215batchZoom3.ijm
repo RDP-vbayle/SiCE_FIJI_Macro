@@ -36,7 +36,11 @@ Dialog.create("SiCE Root hair macro");
 	f=title1; 
 	run("New... ", "name="+title1+"type=Table");
 	print(f,"\\Headings: Image name \t Root Hair nb \t Distance from Root tip \t Length \t Out of Focus \t Branched \t X centroid \t Y centroid");
-
+	title3 = "[Density summary:]"; 
+	h=title3; 
+	run("New... ", "name="+title3+"type=Table");
+	print(h,"\\Headings: Image name \t RH nb  \t Root length \t density");
+	
 if (bulge== true){ 
 	title2 = "[Bulge summary:]"; 
 	g=title2; 
@@ -126,6 +130,7 @@ function RootHairMacro(minsize, bck, MeanT, remov, f,rootCheck) {
 		run("Skeletonize (2D/3D)");
 		run("Analyze Skeleton (2D/3D)", "prune=[shortest branch] calculate show exclude calculate");
 		IJ.renameResults("Branch information","Results");
+		RootLength= getResult("Branch length",0);
 		if (getResult("V2 y",0)>getResult("V1 y",0)) {
 			tipX=getResult("V2 x",0);
 			tipY=getResult("V2 y",0);
@@ -235,7 +240,9 @@ function RootHairMacro(minsize, bck, MeanT, remov, f,rootCheck) {
 	    if (getResult("# Branches", 0)>1) {
 	    Branch[n]= "Yes";	
 	    }
+	    Array.getStatistics(Dist, min, Distmax, mean, stdDev);
 	print(f,title+"\t"+(n+1)+"\t"+Dist[n]+"\t"+Length[n]+"\t"+OOF[n]+"\t"+Branch[n]+"\t"+Xcent[n]+"\t"+Ycent[n]);
+	print(h,title+"\t"+count-2+"\t"+Distmax+"\t"+count-2/Distmax);
 	run("Clear Results");
 	close("Branch information");
 	close("Longest shortest paths");
@@ -247,9 +254,11 @@ function RootHairMacro(minsize, bck, MeanT, remov, f,rootCheck) {
 		roiManager("add");
 		roiManager("select", roiManager("count")-1);
 		roiManager("rename", "Selected_Root_Hairs");
+		print(h,title+"\t"+count-2+"\t"+RootLength+"\t"+count-2/RootLength);
 	    }
 	    else {
-	print(f,title+"\t No Root hairs\t ND \t ND \t ND \t ND \t ND \t ND");    	
+	print(f,title+"\t No Root hairs\t ND \t ND \t ND \t ND \t ND \t ND"); 
+	print(h,title+"\t"+0+"\t"+RootLength+"\t ND");
 	    }
 	selectWindow(title);
 	close("\\Others");
@@ -290,6 +299,8 @@ function RHfiltering(OOF,Dist,Length,MeanT,Xcent,Ycent) {
 	print("Mean:"+getResult("Mean", 0));
 	print("Ratio:"+ratio);
 	selectWindow("Longest shortest paths");
+	run("Select All");
+	run("Clear", "slice");
 	getDimensions(width, height, channels, slices, frames);
 	makeRectangle(0, Ycent[0], width, height);
 	roiManager("Select", 1);
@@ -301,7 +312,7 @@ function RHfiltering(OOF,Dist,Length,MeanT,Xcent,Ycent) {
 	run("Analyze Skeleton (2D/3D)", "prune=[shortest branch] calculate show");
 	IJ.renameResults("Branch information","Results");
 	Dist[m]=getResult("Branch length", 0);
-	print("Distance FRom Root tip:"+Dist[m]);
+	print("Distance From Root tip:"+Dist[m]);
 	close();
 	run("Clear Results");
 	}
