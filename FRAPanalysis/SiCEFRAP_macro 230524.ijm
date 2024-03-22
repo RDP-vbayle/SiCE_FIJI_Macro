@@ -28,6 +28,15 @@
 
 	dir1 = getDirectory("Choose Input Directory ");
 	list1 = getFileList(dir1);
+	
+	if (ori=="cortical"){
+		minZone=pow(zone/2, 2)*PI*3/4;
+		maxZone=2*minZone;
+	}
+	else {
+		minZone=3*zone;
+		maxZone=50*zone;
+	}
 
 				for (m=0; m<list1.length; m++) {					
 				showProgress(m+1, list1.length);
@@ -180,6 +189,9 @@ setBatchMode("exit and display");
 		roiManager("show none");
 		setAutoThreshold("Default dark");
 		run("Convert to Mask");
+		
+		
+		
 		run("Analyze Particles...", "size="+(3*zone)+"-"+(50*zone)+" show=Nothing display exclude summarize add in_situ ");
 		
 		roiManager("Deselect");
