@@ -28,7 +28,7 @@
 
 	dir1 = getDirectory("Choose Input Directory ");
 	list1 = getFileList(dir1);
-	
+
 	if (ori=="cortical"){
 		minZone=pow(zone/2, 2)*PI*3/4;
 		maxZone=3*minZone;
@@ -90,7 +90,7 @@
 		//toUnscaled (Xmax, Ymax);
 		run("Select All");
 		
-// Root segmentation using wavelet
+// Root segmentation using wavelet (for Lateral or Apicobasal FRAP)
 		
 	if (ori!="cortical"){	
 			run("Clear Results");
@@ -118,7 +118,7 @@
 						waitForUser("");
 						}
 			
-//determine root orientation 
+//////determine root orientation  (for Lateral or Apicobasal FRAP)
 			
 			run("Measure");
 			run("Fit Ellipse");
@@ -126,7 +126,7 @@
 			close("plan");
 			close("wave");
 						
-//stack rotation 
+//////stack rotation  (for Lateral or Apicobasal FRAP)
 
 			selectWindow(title);
 			run("Rotate... ", "angle="+angle+" grid=1 interpolation=Bilinear stack");
@@ -164,7 +164,7 @@ setBatchMode("exit and display");
 		roiManager("Deselect");
 		roiManager("multi-measure measure_all");
 		
-/// Bleached ROIs angle correction		
+/// Bleached ROIs angle correction (for Lateral or Apicobasal FRAP)	
 
 	if (ori!="cortical"){
 		for(i=0; i<=nbROI-1; i++)
@@ -197,14 +197,14 @@ setBatchMode("exit and display");
 		selectWindow("Result of 1");
 		roiManager("show none");
 		setAutoThreshold("Default dark");
-		run("Convert to Mask");
-		
+		run("Convert to Mask");		
 		run("Analyze Particles...", "size="+minZone+"-"+maxZone+" show=Nothing display exclude summarize add in_situ ");
 		
 		roiManager("Deselect");
 		roiManager("multi-measure measure_all");
 		}
 
+//Get Bleached ROI centroids 
 		for(i=0; i<=nbROI-1; i++)
 				{
 		XROI[i]= getResult("X", i);
@@ -214,13 +214,11 @@ setBatchMode("exit and display");
 
 		
 		run("Clear Results");	
-		//close("*");
 		close("1");
 		close("Bleached");
 		close("Result of 1");
 		setBatchMode(false);
 		selectWindow(title);
-		roiManager("Show All");
 		roiManager("Show All");
 	
 //Add control ROIs
@@ -240,7 +238,7 @@ setBatchMode("exit and display");
 		run("Clear Results");
 		roiManager("reset");
 		
-
+/// Defines new ROIs for measurements (Oval for cortical rectangle for the other types of bleaching)
 		for(i=0; i<=nbROI-1; i++)
 				{	
 						if (ori=="cortical"){
@@ -268,26 +266,3 @@ setBatchMode("exit and display");
 		close("Summary");
 		run("Close All");
 			} }
-
-function ROIsanalysis (zone,XROI, YROI,Ang, nbROI )
-{
-		selectWindow("Result of 1");
-		run("Analyze Particles...", "size="+(3*zone)+"-"+(30*zone)+" show=Nothing display summarize add in_situ");
-		selectWindow("Summary");
-			lines = split(getInfo(), "\n");
-			headings = split(lines[0], "\t");
-			values = split(lines[1], "\t");
-
-		nbROI= values[1];
-		
-		roiManager("Deselect");
-		roiManager("multi-measure measure_all");
-
-		for(i=0; i<=nbROI-1; i++)
-				{
-		Ang[i]= getResult("Angle", i);
-		XROI[i]= getResult("X", i);
-		YROI[i]= getResult("Y", i);
-				}	
-		run("Clear Results");		
-}
