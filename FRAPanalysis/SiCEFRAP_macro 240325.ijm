@@ -254,6 +254,7 @@ setBatchMode("exit and display");
 					roiManager("Add");
 			}
 				}
+		run("Set Measurements...", "mean redirect=None decimal=5");
 		
 //Make measurements
 		roiManager("Deselect");
