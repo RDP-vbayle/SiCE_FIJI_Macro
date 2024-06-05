@@ -15,7 +15,7 @@
 	Dialog.addNumber("FRAP zone lenght",60, 0,3, "pixels");
 	Dialog.addNumber("Membrane thickness",10, 0,3, "pixels");
 	Dialog.addChoice("Orientation of bleaching", newArray("cortical","Lateral Membrane", "Apico basal Membrane"));
-	Dialog.addNumber(" prebleach image number",12, 0,3, " Frame");
+	Dialog.addNumber(" bleach in image number",12, 0,3, " Frame");
 	Dialog.addNumber(" Find max proheminence",1000, 0,3, " ");
 	Dialog.addNumber(" ROIs nb",3, 0,3, " ");
 	Dialog.show();
