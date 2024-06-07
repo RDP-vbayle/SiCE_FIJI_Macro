@@ -106,9 +106,14 @@ var pi = 3.14159265;
 			setTool("multipoint");
 			run("Point Tool...", "type=Dot color=Red size=Medium label counter=0");
 //			run("Enhance Contrast", "saturated=0.35");
-			waitForUser("Select point ROIs (for each slice if needed)");		
+			waitForUser("Select point ROIs (for each slice if needed)");	
+	isROI=selectionType();
+if (isROI==-1) {
+	close();		
+	}
+	else {
 			run("Measure");
-			nbROI=nResults;
+		nbROI=nResults;
 		xpoints=newArray(); // Array to store ROIs x coordinates
 		ypoints=newArray(); // Array to store ROIs y coordinates
 		zpoints=newArray(); // Array to store ROIs z coordinates
@@ -352,7 +357,7 @@ var pi = 3.14159265;
 		roiManager("Reset");
 		run("Clear Results");
 		close("*");		
-	}}}
+	}}}}
 	
 function RootRot (name,mb)
 {
