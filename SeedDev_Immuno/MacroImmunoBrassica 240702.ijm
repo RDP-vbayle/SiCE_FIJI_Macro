@@ -12,13 +12,14 @@
 	setOption("ExpandableArrays", true);
 	run("Set Measurements...", "area mean centroid center fit shape stack feret's redirect=None decimal=3");
 	run("Select None");
+	run("Colors...", "foreground=white background=black selection=green");
 	
 	Dialog.create("Immuno Macro");
 	Dialog.addNumber("		Layer number? ",4);
-	Dialog.addNumber("	Palissadic	Layer number? ",3);
-	Dialog.addChoice("Palissadic Layer ROI selection", newArray("polygon", "oval"));
+	Dialog.addChoice("Manual ROI selection type", newArray("polygon", "oval"));
 	Dialog.addMessage("	Cell segmentation parameters: \n ");
 	Dialog.addNumber("		Rolling background ",50);
+	Dialog.addNumber("		UnsharpMask radius ",5);
 	Dialog.addMessage("	CellWall selection parameters: \n ");
 	Dialog.addNumber("		Enlargement factor ",1);
 	Dialog.addNumber("		Band width in pixels",2);
@@ -26,18 +27,20 @@
 	Dialog.show();
 	
 	Lnb = Dialog.getNumber();
-	Palnb = Dialog.getNumber();
 	PalROI = Dialog.getChoice();
 	RB = Dialog.getNumber();
+	UsRad = Dialog.getNumber();
 	Ero = Dialog.getNumber();
 	band= Dialog.getNumber();
 	shift=Dialog.getCheckbox();
-
+		
 ///Creation du tableau de résultat
 	title1 = "[Result summary:]"; 
 	f=title1; 
 	run("New... ", "name="+title1+" type=Table");
-	print(f,"\\Headings: Image name \t Cell Layer\t Cell number \t Mean Mb fluorescence\t Cell area");
+
+	print(f,"\\Headings: Image name \t Seed Number \t Cell Layer\t Cell number \t Mean Mb fluorescence\t Cell area");
+
 	
 	name= getTitle();
 		
@@ -62,7 +65,7 @@
 	
 	setBatchMode(true);	
 							    run("Subtract Background...", "rolling="+RB+"");
-								run("Unsharp Mask...", "radius=5 mask=0.60");
+								run("Unsharp Mask...", "radius="+UsRad+" mask=0.60");
 								setAutoThreshold("Otsu dark");
 								setOption("BlackBackground", true);
 								run("Convert to Mask");
@@ -93,9 +96,14 @@ setBatchMode("exit and display");
 			selectWindow("temp");
 			Stack.setChannel(2);
 			run("Tile");
-			if (i+1==Palnb) {
+		Dialog.create(" ");
+		Dialog.addCheckbox("Manual ROI selection for layer "+i+1+"?", false);
+		Dialog.show();
+		man = Dialog.getCheckbox();
+		
+			if (man==true) {
 			setTool(PalROI);
-			waitForUser("Draw ROIs for palissadic and add to manager "+Layer);	
+			waitForUser("Draw ROIs add to manager "+Layer);	
 			}
 			else {
 			setTool("wand");
@@ -123,7 +131,7 @@ setBatchMode("exit and display");
 			run("Select None");
 			selectWindow("C2-temp");
 			roiManager("select", roiManager("count")-1);
-			if (i+1==Palnb) {
+			if (man==true) {
 				run("Measure");
 			}
 			else {
