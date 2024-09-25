@@ -1,5 +1,7 @@
-//ImageJ macro to calculate cytoskeleton bundling indicators
+	//ImageJ macro to calculate cytoskeleton bundling indicators
 // adapted from Takumi Higaki, 29-Oct-2020
+// adapted from 
+
 
 //reset
 setOption("BlackBackground", true);
@@ -66,17 +68,18 @@ var pi = 3.14159265;
 	title1 = "[Result summary:]"; 
 	f=title1; 
 	run("New... ", "name="+title1+" type=Table");
-	print(f,"\\Headings: Image name \t ROI ID \t Skewness nb \t CV  \t Average fibril orientation \t Anisotropy");
+	print(f,"\\Headings: Image name \t Cell ID \t Skewness nb \t CV  \t Average fibril orientation \t Anisotropy");
 	
 	
-  for (i=0; i<list.length; i++) {
-			showProgress(i+1, list.length);	
+  for (k=0; k<list.length; k++) {
+			showProgress(k+1, list.length);	
 			setBatchMode(true);
-		if(endsWith(list[i], ".czi")||endsWith(list[i], ".tif")||endsWith(list[i], ".TIF")){
-			open(Dir1+list[i]);
+		if(endsWith(list[k], ".czi")||endsWith(list[k], ".tif")){
+			open(Dir1+list[k]);
 			name = getTitle();
 			basename =substring(name, 0, lengthOf(name)-4);
-			
+			getPixelSize(unit, pixelWidth, pixelHeight);
+
 ////Cell reorientation
 //Auto
 		 if (seg==true) {
@@ -87,6 +90,8 @@ var pi = 3.14159265;
 		 else {
 		setBatchMode("exit and display");
 		setTool("line");
+		Stack.setChannel(mb);
+		run("Enhance Contrast", "saturated=0.35");
 		waitForUser("Draw cell axis");
 		isROI=selectionType();
 			if (isROI==-1) {
@@ -105,69 +110,69 @@ var pi = 3.14159265;
 			Stack.setChannel(fib);
 			setTool("multipoint");
 			run("Point Tool...", "type=Dot color=Red size=Medium label counter=0");
-//			run("Enhance Contrast", "saturated=0.35");
-			waitForUser("Select point ROIs (for each slice if needed)");	
-	isROI=selectionType();
-if (isROI==-1) {
-	close();		
-	}
-	else {
+			run("Enhance Contrast", "saturated=0.35");
+			waitForUser("Select point ROIs (for each slice if needed)");
+			resetMinAndMax();
 			run("Measure");
-		nbROI=nResults;
+			nbROI=nResults;
 		xpoints=newArray(); // Array to store ROIs x coordinates
 		ypoints=newArray(); // Array to store ROIs y coordinates
 		zpoints=newArray(); // Array to store ROIs z coordinates
 		for (p = 0; p < nbROI; p++) {
-			xpoints[p]= getResult("X", p);
-			ypoints[p]= getResult("Y", p);
+			xpoints[p]= getResult("XM", p);
+			ypoints[p]= getResult("YM", p);
 			zpoints[p]= getResult("Slice", p);
 		}
 			run("Clear Results");
 			for (j = 0; j < nbROI; j++) {
 			setSlice(zpoints[j]);
+			Stack.setChannel(fib);
 			makeRectangle(xpoints[j]-RectSize/2, ypoints[j]-RectSize/2, RectSize, RectSize);
 			run("Duplicate...", "title=temp");
 			rename("temp");
 			
-		width = getWidth();
-		height = getHeight();
-		setBatchMode(true);
+/// part from Higaki et al.	41598_2020_79136_MOESM3_ESM.ijm
 
-			label = getInfo("slice.label");
-			integ1 = 0.0;
-			sigNum = 0.0;
-			for (y=0; y<height; y++) {
-				for (x=0; x<width; x++) {
-					l = getPixel(x,y);
-					if (l!=0){
-					sigNum = sigNum + 1;
-					integ1 = integ1 + i;
-					}
+		width = getWidth();
+	height = getHeight();
+	setBatchMode(true);
+	
+		label = getInfo("slice.label");
+		integ1 = 0.0;
+		sigNum = 0.0;
+		for (y=0; y<height; y++) {
+			for (x=0; x<width; x++) {
+				i = getPixel(x,y);
+				if (i!=0){
+				sigNum = sigNum + 1;
+				integ1 = integ1 + i;
 				}
 			}
-			mean = integ1/sigNum;
-			integ2 = 0.0;
-			for (y=0; y<height; y++) {
-				for (x=0; x<width; x++) {
-					l = getPixel(x,y);
-					dif = l - mean;
-					if (l!=0){integ2 = integ2 + pow(dif, 2);}
-				}
+		}
+		mean = integ1/sigNum;
+		integ2 = 0.0;
+		for (y=0; y<height; y++) {
+			for (x=0; x<width; x++) {
+				i = getPixel(x,y);
+				dif = i - mean;
+				if (i!=0){integ2 = integ2 + pow(dif, 2);}
 			}
-			variance = integ2/sigNum;
-			stdev = sqrt(variance);
-			cv = stdev/mean;
-			stdev3 = pow(stdev, 3);
-			integ3 = 0.0;
-			for (y=0; y<height; y++) {
-				for (x=0; x<width; x++) {
-					l = getPixel(x,y);
-					dif = l - mean;
-					if (l!=0){integ3 = integ3 + pow(dif, 3);}
-				}
+		}
+		variance = integ2/sigNum;
+		stdev = sqrt(variance);
+		cv = stdev/mean;
+		stdev3 = pow(stdev, 3);
+		integ3 = 0.0;
+		for (y=0; y<height; y++) {
+			for (x=0; x<width; x++) {
+				i = getPixel(x,y);
+				dif = i - mean;
+				if (i!=0){integ3 = integ3 + pow(dif, 3);}
 			}
-			skewInteg = integ3/stdev3;
-			skewness = skewInteg/sigNum;
+		}
+		skewInteg = integ3/stdev3;
+		skewness = skewInteg/sigNum;
+
 		
 		close("Temp");
 
@@ -357,7 +362,8 @@ if (isROI==-1) {
 		roiManager("Reset");
 		run("Clear Results");
 		close("*");		
-	}}}}
+	}}}
+	
 	
 function RootRot (name,mb)
 {
