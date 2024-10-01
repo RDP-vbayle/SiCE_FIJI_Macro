@@ -1,6 +1,6 @@
 ///////Macro for features extraction of Root tissues (mb size, angles, etc...)
 ///// Prerequisite: Wavelet_A_trou that must be copied in your FIJI/plugin folder &  Distance Based Watershed part of the MorphoLibJ library
-///// INPUT: Single channel images (Z- stacks allowed) of Arabidopsis root cells showing membrane fluorescence
+///// INPUT: Single channel images (Z- stacks allowed) of Arabidopsis root cells showing membrane/cell wall fluorescence (Propidium Iodide, Cacofluor,etc...)
 
 
 
@@ -44,8 +44,8 @@ setBatchMode("exit and display");
 
 	Dialog.create("SiCE DivMacroRoot");
 	Dialog.addMessage("  \n ");
-	Dialog.addCheckbox("Paired cells analysis?", true);
-	Dialog.addCheckbox("Global Three way junctions analysis?", true);
+	Dialog.addCheckbox("Paired cells analysis?", true); /// For root architecture with abnormal cell division pattern ie abnormal cell files pattern
+	Dialog.addCheckbox("Global Three way junctions analysis?", true); ///compile data of the three way junction in a table
 	Dialog.addMessage("		Cell segmentation parameters: \n ");
 	Dialog.addNumber("Min Cell size",100, 1,5, "pixels^2");
 	Dialog.addNumber("Max Cell size",20000, 1,5, "pixels^2");
@@ -53,7 +53,7 @@ setBatchMode("exit and display");
 	Dialog.addNumber("Distance Map noise",2, 1,2, " "); 
 	Dialog.addCheckbox("Manual cell removal?", true);
 	Dialog.addMessage("		Edges detection parameters: \n ");
-	Dialog.addNumber("Cell file Minimal distance",30, 1,2, "pixels");
+	Dialog.addNumber("Cell file Minimal distance",30, 1,2, "pixels"); ///Minimal distance between centroids of cell belonging to adjacent cell files
 	Dialog.addNumber("Minimal distance to measure corners",5, 1,2, "pixels");
 	Dialog.show();
 	Simp=Dialog.getCheckbox();
@@ -66,12 +66,13 @@ setBatchMode("exit and display");
 	CFlimt=Dialog.getNumber();
 	PTlimit=Dialog.getNumber();
 	
+/// Table creation for 3WJ results	
 if (Tway==true){
 	g = "[Three way junctions summary:]";
 	run("New... ", "name="+g+" type=Table");
 	print(g,"\\Headings: Image name \t Junction number\t Junction Type \t TWJ X \t TWJ Y \t Angle1 \t Angle2 \t Angle3 \t Angle4");
 	}	
-	
+/// Table creation for global cell properties results		
 if (Simp==false){
 	f="[Result summary:]";
 	run("New... ", "name="+f+" type=Table");
@@ -142,6 +143,7 @@ setBatchMode(true);
 			close("Drawing of cells-watershed");
 			if (remov==true)
 			{
+/// Abnormal segmented objects checkpoint
 			selectWindow("ROI Manager");
 			// MAke the CROP
 setBatchMode("exit and display");
@@ -156,12 +158,12 @@ waitForUser("Remove abnormal objects in ROImanager");
 
 if (Simp==true){
 	Dialog.create("Cells checkpoint");
-	Dialog.addMessage("Select pair of cells with correct division plane \n ");
-	Dialog.addString("Cell 1","2,4, , , ");
-	Dialog.addString("Cell 2","3,5, , , ");
-	Dialog.addMessage("Select pair of cells with wrong division plane \n ");
-	Dialog.addString("Cell 1","2,4, , , ");
-	Dialog.addString("Cell 2","3,5, , , ");
+	Dialog.addMessage("Select pair of cells with correct division plane \n "); //// Here Cell 12 vs 13, 24 vs 25
+	Dialog.addString("Cell 1","12,24, , , ");
+	Dialog.addString("Cell 2","13,25, , , ");
+	Dialog.addMessage("Select pair of cells with wrong division plane \n "); //// Here Cell  1 vs 2 and 7 vs 8 
+	Dialog.addString("Cell 1","1,7, , , ");
+	Dialog.addString("Cell 2","2,8, , , ");
 	Dialog.show();
 	
 	strCR = Dialog.getString();
@@ -174,6 +176,8 @@ if (Simp==true){
 	idxR = num2array(strR,",");
 	idxL = num2array(strL,",");
 	
+//// Table creation for Paired daugther cells analysis
+
 	d = "[Correct div. summary:]";
 	run("New... ", "name="+d+" type=Table");
 	print(d,"\\Headings: Image name \t Junction nb \t Cell 1 number \t Cell 1 File \t Cell 1 Area \t Cell 2 number \t Cell 2 File \t Cell 2 Area \t Length \t Membrane Angle");	
@@ -263,7 +267,7 @@ for(l=0; l<=nROIs-1; l++)
 	}
 		run("Clear Results");
 
-/// creation matrice, definition membrane apicale
+/// creation matrice, definition apical mb
 			HLx = newArray;
 			HRx = newArray;
 			HLy = newArray;
