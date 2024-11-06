@@ -1,4 +1,8 @@
-///Macro to apply process to folders and subfolders (adapted from Rob Lees)
+///Macro to apply process to folders and subfolders (adapted from Rob Lees).
+///INPUT: folders and subfolders containing Z stacks acquisitions.
+///OUTPUT: SUM-Z Projection for each acquisition. For optimal visualisation & data presentation normalisation of pixel intensity is done as following:
+/// For each set of data (folder), min and max pixel value are updated. 
+/// Min pixel value (ie noise) is calculated in a 20 pixels square ROI in the upper left side of the SUM projections. Max pixel value correspond to the maximum pixel value of all the SUM projection of the dataset (folder)
 /// Vincent Bayle 220524 SiCEteam
 
 
