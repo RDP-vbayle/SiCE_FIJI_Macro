@@ -1,0 +1,1656 @@
+<!DOCTYPE html><html>
+	<meta charset="utf-8" />
+	<!-- DataCite Metadata Generator (Kernel 4.0)-->
+	<!-- created: 2013-10-04 paluchm - DataCite Canada -->
+	<!-- modified: 2015-02-04 paluchm - Updated to Kernel 3.1 -->
+	<!-- modified: 2015-11-01 paluchm - Fixed HTML validation problems. Modified implementation so that new XML tags can be generated just by adding HTML elements with proper names and classes. -->
+	<!-- modified: 2016-01-09 paluchm - Fixed rightsList tag name. -->
+	<!-- modified: 2017-02-12 paluchm - Updated to Kernel 4.0 and JQuery 3 -->
+	<!-- modified: 2017-02-13 paluchm - Fixed ordering of givenName and familyName tags -->
+	<!-- modified: 2017-04-01 paluchm - Updated ResourceType to allow empty value -->
+	<!-- modified: 2017-10-05 r3r57 - Added IE support and straightforward XML download -->
+	<!-- This form makes use of styles developed by the wet-boew project (https://github.com/wet-boew/wet-boew)  -->
+	<!-- Recommended browsers are Firefox, Chrome or Edge. Minimum supported IE version is 8. -->
+	<!-- modified: 2019-10-09 osmancakirio - fixed the errors in multiple tags. (deleted german explanations) -->
+	<!-- modified: 2019-10-09 osmancakirio - added lang attribute: title, publisher, subject, contributor, description, rights, awardTitle   -->
+	<!-- modified: 2019-10-09 osmancakirio - added nameType attribute to creator tag, -->
+	<!-- modified: 2019-10-09 osmancakirio - added  schemeURI, rightsIdentifierScheme, rightsIdentifier, rightsURI attributes to rights tag -->
+	<!-- modified: 2019-10-09 osmancakirio - options menus are updated/added: creators (nameType, nameIdentifierScheme)
+																			  resourceType,
+																			  contributor (contributorType, nameIdentifierScheme)
+																			  relatedIdentifier (relationType)
+																			  description (descriptionType)
+																			  fundingReference (funderIdentifierType)
+																			  subject (subjectScheme-->
+	<!-- modified: 2019-10-10 osmancakirio - Date Information field added -->
+	<!-- modified: 2019-10-21 osmancakirio - Information links added -->
+	<!-- modified: 2020-08-14 aborel - EPFL adaptations of M/R/O fields -->
+	<!-- modified: 2020-08-26 aborel - Namespace fix for compliance with the Datacite schema & tools that use it -->
+	<!-- modified: 2020-10 to 2020-11-10 aborel - various ergonomy and metadata model modifications based on user feedback -->
+	<!-- modified: 2021-02-19 aborel - fix incorrect Funding implementation; adapt resourceType to Zenodo requirements; add contact info -->
+	<!-- modified: 2021-03-03 aborel - alpha version for the import of existing metadata -->
+	<!-- modified: 2021-03-11 aborel - beta version for the import of existing metadata -->
+	<!-- modified: 2021-03-31 aborel - release version for the import of existing metadata -->
+	<!-- modified: 2021-09-15 aborel - bugfix: CC-BY-SA, not CC-BY-NC-SA -->
+	<!-- modified: 2025-02-03 vbayle - RDP version-->
+	
+	<head>
+	<title>RDP metadata Generator- Kernel 4.3</title>
+	<script
+		src="https://code.jquery.com/jquery-3.5.1.min.js"
+		integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+		crossorigin="anonymous">
+	</script>
+	
+		<script type = "text/javascript" >
+			var generatorVersion = "20250206";
+			var kernelVersion = "4.3";
+			var kernelNamespace = "http://datacite.org/schema/kernel-4";
+			var kernelSchema = "https://schema.datacite.org/meta/kernel-4.3/metadata.xsd";
+			var kernelSchemaLocation = kernelNamespace + " " + kernelSchema;
+			var header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + br() + "<resource xmlns=\"" + kernelNamespace + "\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"" + kernelSchemaLocation + "\">" + br();
+			header += "<!-- RDP Datacite Metadata Generator version " + generatorVersion + " -->" + br();
+			var load_errors = '';
+	
+	
+			$(document).ready(function() {
+	
+				document.getElementById('metadataxml').addEventListener('change', handleFileSelect, false);
+				
+				$("div.versionstatement").append(generatorVersion);
+				$("select[title]").each(function() {
+					var tagName = optionTitles[name($(this))];
+					// console.log(name($(this)), tagName);
+					ps($(this), optionValues[tagName]);
+				});
+				//$("select[title]").each(function() {
+				//	var tagName = titleOptions(name($(this)));
+				//	ps($(this), optionValues[titleOptions(tagName)]);
+				//});
+				$("input.currentyear").each(function(){
+					var todaydate = new Date();
+					var year = todaydate.getFullYear();
+	   				$(this).val(year);
+				});
+				$("input.currentdate").each(function(){
+					var todaydate = new Date();
+	   				var day = todaydate.getDate();
+	   				var month = todaydate.getMonth() + 1;
+	   				if (day < 10) {
+						day = '0' + day;
+					}
+					if (month < 10) {
+						month = '0' + month;
+					}
+	   				var year = todaydate.getFullYear();
+	   				var datestring = year + "-" + month + "-" + day;
+	   				$(this).val(datestring);
+				});
+				$("body").on("keyup", "input", function(event) {
+					event.preventDefault();
+					var xml = header;
+		
+					$("div.section").each(function() {
+						xml += process($(this));
+					});
+					xml += ct("resource");
+					metadata = xml;
+					/*
+					if (load_errors != '') {
+						console.log('we have errors');
+						//$(".right.load_errors").empty();
+						$("div.right.load_errors").find('.error_list').append(load_errors);
+						$(".right.load_errors").show();
+					}
+					*/
+					
+					$("div.right code").text(xml);
+					$("div.right.metadata").show();
+				});
+				$("body").on("change", "select", function(event) {
+					event.preventDefault();
+					$("input").eq(0).keyup();
+				});
+				$("#reset").bind("click", function(event) {
+					event.preventDefault();
+					location.reload(true);
+				});
+				$("#selectall").bind("click", function(event) {
+					event.preventDefault();
+					st($("div code").get(0));
+				});
+				$("button.add.group").bind("click", function(event) {
+					event.preventDefault();
+					var d = $(this).parent().find(".tag-group:first").clone();
+					$(d).find("input,select").val("");
+					$(d).find("input + button.delete.element").each(function() {
+						$(this).prev("input").remove();
+						$(this).remove();
+					});
+					$("<button/>", {
+						"class": "delete group",
+						type: "button",
+						text: "-"
+					}).appendTo($(d).find(".tag:first"));
+					$(this).parent().append('<hr class="group-divider"/>');
+					d.appendTo($(this).parent());
+				});
+				$("div.section").on("mouseenter focusin", "button.delete.group, button.delete.single-tag", function(event) {
+					event.preventDefault();
+					console.log('Focus in');
+					$(this).parent().find("input.main").toggleClass("main-off");
+					$(this).parent().find("input.main").toggleClass("main");
+					$(this).parent().toggleClass("remove-highlight");
+				});
+				$("div.section").on("mouseleave focusout", "button.delete.group, button.delete.single-tag", function(event) {
+					event.preventDefault();
+					console.log('Focus out');
+					$(this).parent().find("input.main-off").toggleClass("main");
+					$(this).parent().find("input.main-off").toggleClass("main-off");
+					$(this).parent().toggleClass("remove-highlight");
+				});
+	
+				$("div.section").on("click", "button.delete.group", function(event) {
+					event.preventDefault();
+					// console.log($(this).parent().html());
+					// console.log($(this).parent().parent().prev()[0].outerHTML);
+					// var last_separator = $(this).find(".group-separator").last();
+					// last_separator.remove();
+					$(this).parent().parent().prev().remove()
+					$(this).parent().remove();
+					$("input").eq(0).keyup();
+				});
+				$("body").on("click", " button.add.single-tag", function(event) {
+					event.preventDefault();
+					var c = $(this).parent().clone();
+					$(c).find("input,select").val("");
+					$(this).before($("<button/>", {
+						"class": "delete single-tag",
+						type: "button",
+						text: "-"
+					}));
+					c.insertAfter($(this).parent());
+					$(this).remove();
+				});
+				$("body").on("click", "button.delete.single-tag", function(event) {
+					event.preventDefault();
+					$(this).parent().remove();
+					$("input").eq(0).keyup();
+				});
+				$("body").on("click", "button#more", function(event) {
+					event.preventDefault();
+					var div = $(this).parent();
+					$(div).find("button#more").hide();
+					$(div).find("div#subgroup,button#less").show();
+				});
+				$("body").on("click", "button#less", function(event) {
+					event.preventDefault();
+					var div = $(this).parent();
+					$(div).find("div#subgroup,button#less").hide();
+					$(div).find("button#more").show();
+					$(div).find("div#subgroup input,div#subgroup select").val("");
+					$("input").eq(0).keyup();
+				});
+				$("body").on("click", "h3.recommended,h3.other", function(event) {
+					var div = $(this).next("div");
+					var text = $(this).html();
+					if (text.charAt(0) == "+") {
+						text = text.replace("+", "-");
+						$(this).html(text);
+						$(div).show();
+					} else {
+						if (text.charAt(0) == "-") {
+							text = text.replace("-", "+");
+							$(this).html(text);
+							$(div).hide();
+						}
+					}
+				});
+			});
+			var optionValues = {};
+			optionValues["descriptionType"] = ["Abstract", "Methods", "SeriesInformation", "TableOfContents", "TechnicalInfo", "Other"];
+			optionValues["relatedIdentifierType"] = ["ARK", "arXiv", "bibcode", "DOI", "EAN13", "EISSN", "Handle", "IGSN", "ISBN", "ISSN", "ISTC", "LISSN", "LSID", "PMID", "PURL", "UPC", "URL", "URN"];
+			optionValues["relationType"] = ["Describes", "IsDescribedBy", "HasPart", "IsPartOf", "HasMetadata", "IsMetadataFor",
+				"HasVersion", "IsVersionOf", "IsNewVersionOf", "IsPreviousVersionOf", "IsSourceOf", "IsDerivedFrom", "References",
+				"IsReferencedBy", "IsVariantFormOf", "IsIdenticalTo", "IsSupplementTo", "IsSupplementedBy", "Documents",
+				"IsDocumentedBy" ];
+			optionValues["resourceTypeGeneral"] = ["Microscopy Images", "Dataset", "Model", "Software", "Other"];
+			optionValues["dateType"] = ["Accepted", "Available", "Copyrighted", "Collected", "Created", "Issued", "Submitted", "Updated", "Valid", "Withdrawn"];
+	
+			optionValues["titleType"] = ["AlternativeTitle", "Subtitle", "TranslatedTitle", "Other"];
+			optionValues["funderIdentifierType"] = ["Crossref Funder ID", "GRID", "ISNI", "ROR", "Other"];
+			optionValues["nameType"] = ["Personal", "Organizational"];
+			optionValues["nameIdentifierScheme"] = ["GND", "ORCID"];
+			optionValues["affiliationIdentifierScheme"] = ["GRID", "ROR"];
+			optionValues["subjectScheme"] = ["DDC", "GND", "wikidata"];
+			optionValues["rights"] = ["Creative Commons Attribution 4.0", "Creative Commons Attribution Share-Alike 4.0", "CC0 1.0", "GNU General Public License 3.0", "BSD 3-Clause \"New\" or \"Revised\" License (BSD-3-Clause)", "MIT License"];
+            
+            
+            
+            //RDP optionValues
+            optionValues["Imaging_method"] = ["Confocal", "Brightfield","EM","Dataset", "Other"];
+			optionValues["Imaging_instrument"] = ["Binocular","Spinning", "LSM980", "SP8", "SEM","Macrofluo","Other"];
+			optionValues["RDPteam"] = ["EvoDevo", "Mecano", "SiCE","SignHor","SeedDev","Mozaic","Morphoflo","Epichrom"]; 
+			optionValues["CreatorAffiliation"] = ["CNRS", "INRAe", "UCBL","ENS"]; 
+			optionValues["RessourceType"] = ["Microscopy", "Sequences", "OMICS"];
+			optionValues["CurrentStatus"] = ["Raw", "Analysed", "Published"]; 
+			optionValues["contributorType"] = ["ContactPerson","ProjectLeader", "pHdStudent", "Post-Doc", "ITA", "Other"]; 
+			optionValues["Imaging_Format"] = ["XY", "XYZ", "XYT", "XYZT", "Other"]; 
+			optionValues["ImageAnalysisPipeline"] = ["FIJI", "Python", "Gnomon", "Ilastik", "Imaris", "Other"];
+			optionValues["StatisticalAnalysis"] = ["R", "JASP", "Excel","Other"]; 
+
+			var optionRightsIdentifiers = {};
+			optionRightsIdentifiers["Creative Commons Attribution 4.0"] = "CC-BY-4.0";
+			optionRightsIdentifiers["Creative Commons Attribution Share-Alike 4.0"] = "CC-BY-SA-4.0";
+			optionRightsIdentifiers["CC0 1.0"] = "CC0-1.0";
+			optionRightsIdentifiers["GNU General Public License 3.0"] = "GPL-3.0-or-later";
+			optionRightsIdentifiers["BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License (BSD-3-Clause)"] = "BSD-3-Clause";
+			optionRightsIdentifiers["MIT License"] = "MIT";
+	
+			var fieldDependancies = {};
+			fieldDependancies["Rights. Choose appropriate license in the list"] = {};
+			fieldDependancies["Rights. Choose appropriate license in the list"]["rightsIdentifier"] = optionRightsIdentifiers;
+			fieldDependancies["Rights. Choose appropriate license in the list"]["schemeURI"] = {};
+			fieldDependancies["Rights. Choose appropriate license in the list"]["rightsIdentifierScheme"] = {};
+			fieldDependancies["Rights. Choose appropriate license in the list"]["xml:lang"] = {};
+			for (var key in optionRightsIdentifiers) {
+				fieldDependancies["Rights. Choose appropriate license in the list"]["schemeURI"][key] = "https://spdx.org/licenses/";
+	    		fieldDependancies["Rights. Choose appropriate license in the list"]["rightsIdentifierScheme"][key] = "SPDX";
+	    		fieldDependancies["Rights. Choose appropriate license in the list"]["xml:lang"][key] = "en";
+			}
+			// console.log(fieldDependancies);
+	
+	
+			var optionTitles = {};
+			optionTitles["Description type. Only use Abstract for now"] = "descriptionType";
+			optionTitles["Related identifier type (DOI, PMID...)"] = "relatedIdentifierType";
+			optionTitles["Relation type"] = "relationType";
+			optionTitles["Type of data. Only use Dataset for now"] = "resourceTypeGeneral";
+			optionTitles["Date type (if none, publication date)"] = "dateType";
+			optionTitles["Title type (if not main)"] = "titleType";
+            optionTitles["RessourceType"] = "RessourceType";
+            optionTitles["CurrentStatus"] = "CurrentStatus";
+			optionTitles["Identifier type. Crossref ID is recommended"] = "funderIdentifierType";
+			optionTitles["Default: personal name"] = "nameType";
+			optionTitles["Name identifier scheme (e.g. ORCID)"] = "nameIdentifierScheme";
+			optionTitles["Affiliation identifier scheme (e.g. GRID)"] = "affiliationIdentifierScheme";
+            
+            optionTitles["Imaging_method"] = "Imaging_method";
+            optionTitles["Imaging_instrument"] = "Imaging_instrument";
+            optionTitles["RDPteam"] = "RDPteam";
+            optionTitles["CreatorAffiliation"] = "CreatorAffiliation";
+            optionTitles["contributorType"] = "contributorType";
+			optionTitles["Imaging_Format"] = "Imaging_Format";
+            optionTitles["ImageAnalysisPipeline"] = "ImageAnalysisPipeline";
+            optionTitles["StatisticalAnalysis"] = "StatisticalAnalysis";
+
+            
+            
+	
+			function swap(json){
+	  			var ret = {};
+	  			for(var key in json){
+	    			ret[json[key]] = key;
+	  			}
+	  			return ret;
+			}
+			var reverseOptionTitles = swap(optionTitles);
+	
+			function process(section) {
+				var isWrapper = $(section).hasClass("wrapper-tag");
+				var indent = 0;
+				var xml = "";
+				if (isWrapper) {
+					indent = 1;
+				}
+				$(section).find(".tag-group>.tag").each(function() {
+					xml += processTag(this, indent);
+				});
+				if (xml.length > 0) {
+					if (isWrapper) {
+						var wrapperName = name(section);
+						xml = ot(wrapperName) + br() + xml + ct(wrapperName) + br();
+					}
+				}
+				return xml;
+			}
+	
+			function processTag(tag, indent) {
+				var xml = "";
+				var attributes;
+				var value;
+				
+				var tagValues = $(tag).children(".tag-value");
+				if ($(tagValues).length) {
+					try {
+						value = inputValue(tagValues[0]);
+					}
+					catch(err) {
+						value = "";
+						console.log(err.message);
+						load_errors += "<li>A <b>" + name(tag) + "</b> field was not recognized.</li>\n";
+					}
+					
+					/* console.log("tagValues[0]:");
+					console.log(tagValues[0]);
+					console.log(value);*/
+					inputTitle = $(tagValues[0]).attr("title");
+				}
+				$(tag).children("input.linked-input").each(function() {
+					/* 
+					console.log(this);
+					console.log($(this).attr("title"));
+					console.log(value);
+					console.log(inputTitle);
+					console.log("2020-11-25 version");
+					console.log(optionRightsIdentifiers[value]);
+					console.log("2020-11-26 version");
+					console.log(fieldDependancies[inputTitle][$(this).attr("title")][value]);
+					//$(this).val(optionRightsIdentifiers[value]);
+					*/
+					$(this).val(fieldDependancies[inputTitle][$(this).attr("title")][value]);
+				});
+	
+				var tagName = name(tag);
+				var attr = attribs(tag);
+	
+				$(tag).children(".tag").each(function() {
+					xml += processTag(this, indent + 1);
+				});
+				if (xml.length > 0) {
+					xml = tab(indent) + ota(tagName, attr) + br() + xml + tab(indent) + ct(tagName) + br();
+				} else if (typeof value !== "undefined" && (value.length > 0 || ($(tag).hasClass("allow-empty") && attr.length > 0))) {
+					xml = tab(indent) + ota(tagName, attr) + value + ct(tagName) + br();
+				}
+				return xml;
+			}
+	
+			function attribs(element) {
+				var attribs = "";
+				$(element).children(".tag-attribute").each(function() {
+					var value = "";
+					var n = name(this);
+					if ($(this).is("input")) {
+						try {
+							value = inputValue(this);
+						}
+						catch(err) {
+							alert('attribs: \n' + err.message);
+							value = "";
+						}
+						
+					}
+					if ($(this).is("select")) {
+						n = optionTitles[name(this)];
+						value = selectValue(this);
+					}
+					if (value.length > 0) {
+						if (attribs.length > 0) {
+							attribs += " ";
+						}
+						attribs += n + "=\"" + value + "\"";
+					}
+				});
+				return attribs;
+			}
+	
+			function inputValue(input) {
+				return $(input).val().encodeXML();
+			}
+	
+			function selectValue(select) {
+				// normally we have a selected value to use for XML creation,
+				// but this is not always the case for imported metadata (unexpected options)
+				if ($(select).find("option").filter(":selected").length == 0) {
+					return "";
+				} else {
+					return $(select).find("option").filter(":selected").val().encodeXML();
+				}
+			}
+	
+			function name(tag) {
+				return $(tag).attr("title");
+			}
+	
+			function ps(s, sarr) {
+				var ti = $(s).attr("title")
+				// console.log("ti: ", ti);
+				addO(s, "", "[" + ti + "]");
+				// console.log("s: ", s);
+				for (var i = 0; i < sarr.length; i++) {
+					addO(s, sarr[i], sarr[i]);
+				}
+				// console.log(s);
+			}
+	
+			function addO(s, v, d) {
+				$(s).append($("<option>").val(v).html(d));
+			}
+	
+			function br() {
+				return "\n";
+			}
+	
+			function tab(number) {
+				var tabs = "";
+				if (typeof number !== "undefined") {
+					for (var i = 1; i <= number; i++) {
+						tabs += "   ";
+					}
+				} else {
+					tabs = "   ";
+				}
+				return tabs;
+			}
+	
+			function ota(tag, attr) {
+				if (attr.length > 0) {
+					return "<" + tag + " " + attr + ">";
+				} else {
+					return ot(tag);
+				}
+			}
+	
+			function ot(tag) {
+				return "<" + tag + ">";
+			}
+	
+			function ct(tag) {
+				return "</" + tag + ">";
+			}
+	
+			function st(element) {
+				var doc = document,
+						text = element,
+						range, selection;
+				if (doc.body.createTextRange) {
+					range = doc.body.createTextRange();
+					range.moveToElementText(text);
+					range.select();
+				} else {
+					if (window.getSelection) {
+						selection = window.getSelection();
+						range = doc.createRange();
+						range.selectNodeContents(text);
+						selection.removeAllRanges();
+						selection.addRange(range);
+					}
+				}
+			}
+			String.prototype.encodeXML = function() {
+				return this.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+			};
+			var metadata = "";
+			var MIME_TYPE = "application/xml";
+			var cleanUp = function(a) {
+				setTimeout(function() {
+					window.URL.revokeObjectURL(a.href);
+				}, 1500);
+				$("span#output").html("");
+			};
+			var downloadFile = function() {
+				window.URL = window.webkitURL || window.URL;
+				var prevLink = $("span#output a");
+				if (prevLink) {
+					$("span#output").html("");
+				}
+				var bb = new Blob([metadata], {
+					type: MIME_TYPE
+				});
+				if (navigator.msSaveBlob) {
+					navigator.msSaveBlob(bb, "metadata.xml");
+				} else {
+					var a = document.createElement("a");
+					a.download = "metadata.xml";
+					a.href = window.URL.createObjectURL(bb);
+					a.onclick = function(e) {
+						if ($(this).is(":disabled")) {
+							return false;
+						}
+						cleanUp(this);
+					};
+					$(a).appendTo($("span#output"));
+					$(a)[0].click();
+				}
+			};
+	
+			function save() {
+				if (false) {
+					alert("Not currently supported in Internet Explorer");
+				} else {
+					downloadFile();
+				}
+			};
+	
+			function generateUUID() { // Public Domain/MIT
+			    var d = new Date().getTime();//Timestamp
+			    var d2 = (performance && performance.now && (performance.now()*1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+			    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			        var r = Math.random() * 16;//random number between 0 and 16
+			        if(d > 0){//Use timestamp until depleted
+			            r = (d + r)%16 | 0;
+			            d = Math.floor(d/16);
+			        } else {//Use microseconds since page-load if supported
+			            r = (d2 + r)%16 | 0;
+			            d2 = Math.floor(d2/16);
+			        }
+			        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+			    });
+			};
+	
+	
+		function resetForm(){
+			// clear all text inputs and selectors
+			$("input").val('');
+			$("select").val('');
+			// remove excess repeats of fields
+			$("button.delete.group").parent().remove();
+			$("button.delete.single-tag").parent().remove();
+			// The extra date added for Zenodo availability causes a small bug (imported into a different field)
+			// Purge the group dividers that would accumulate otherwise...
+			$("hr.group-divider").remove();
+			load_errors = '';
+			$("div.right.load_errors").find('.error_list').empty();
+			$("div.right.load_errors").hide();
+		};
+	
+		function processXmlNode(startnode, control) {
+			// This is absolutely not working, recursion is completely off
+			var node = startnode;
+			console.log(control.toString() + ' recursion levels left')
+			if (control < 0) {
+				return;
+			}
+			if (node.nodeName=='#text' || node.nodeName=='#comment') {
+				// non-content nodes, pass
+			} else {
+				if (node.hasChildNodes()) {
+					for (i = 0; i < node.childNodes.length ;i++) {
+						var nextnode = node.childNodes[i];
+						console.log(node.nodeName + ' ' + i.toString() + '/' + node.childNodes.length.toString() + ': ' + nextnode.nodeName);
+						if (nextnode.nodeName == 'creators') {
+							console.log('Found ' + nextnode.nodeName);
+							// processXmlNode(nextnode, control-1);
+	
+						} else {
+							processXmlNode(nextnode, control-1);
+						}
+						// processXmlNode(nextnode);
+					}
+				} else {
+					console.log(node.nodeName + ': ' + node.nodeValue);
+				}
+			}
+		};
+	
+		function handleFileSelect(evt)
+	    {
+	        var files = evt.target.files; // FileList object
+	        var xmlData = "no data yet";
+	        load_errors = '';
+	
+	        for (var i = 0, f; f = files[i]; i++)
+	        {
+	
+	            var reader = new FileReader();
+	            reader.onload = function(event){
+	                // NOTE: event.target points to FileReader
+	                xmlData = event.target.result;
+	    			resetForm();
+	
+	    			var parser = new DOMParser();
+					var xmlDoc = parser.parseFromString(xmlData,"text/xml");
+					//console.log('xmlDoc');
+	    			//console.log(xmlDoc);
+	    			var nodes = xmlDoc.documentElement.children;
+	    			if (xmlDoc.documentElement.tagName != 'resource') {
+	    				load_errors += '<li>Not a correct Datacite XML file</li>';
+	    			}
+	    			for (i = 0; i < nodes.length ;i++) {
+	
+						var mainnode = nodes[i];
+						console.log(mainnode.children.length.toString() + ' subfields and ' + mainnode.attributes.length +
+							' attributes for field ' + mainnode.nodeName);
+						console.log('regular field: ' + mainnode.nodeName);
+						for (m = 0; m < mainnode.attributes.length; m++){
+							attr = mainnode.attributes[m];
+							console.log(mainnode.nodeName + ' ' + attr.name);
+							possibleSelector = reverseOptionTitles[attr.name];
+							console.log('trying to find selector for ' + attr.name);
+							console.log('/' + possibleSelector + '/ => ' + attr.value);
+							if (possibleSelector) {
+								var jdest = $('div[title="' + mainnode.nodeName +
+								 '"]:last').find('select[title="' + possibleSelector + '"]:last');
+								if (jdest.find("[value='" + attr.value + "']").length > 0) {
+									jdest.val(attr.value);
+								} else {
+									console.log('selector problem');
+									load_errors += "<li>MN " + mainnode.nodeName + "/" + attr.name + ": unknown value " + attr.value + "</li>";
+								}
+							}
+						}
+	
+	
+						if (mainnode.childNodes.length == 1) {
+							console.log('Value: ' + mainnode.childNodes[0].nodeValue);
+							var jtarget = 'input[title="' + mainnode.nodeName + '"]:last';
+							$(jtarget).val(mainnode.childNodes[0].nodeValue);
+							for (m = 0; m < mainnode.attributes.length; m++){
+								attr = mainnode.attributes[m];
+								console.log(mainnode.nodeName + ' ' + attr.name);
+								var jdest = $('div[title="' + mainnode.nodeName + '"]:last').find('input[title="' + attr.name + '"]:last');
+								console.log(jdest);
+								jdest.val(attr.value);
+							}
+	
+						}
+	
+	
+						/* special treatment of mandated field instances, i.e. date/dateType = Available */
+						/* where we have already two (or more) fields to hold the mandatory defaults */
+						specialValue = false;
+						specialValueDone = false;
+						if (mainnode.nodeName == "dates") {
+							var specialFieldsBelow = true;
+						} else {
+							var specialFieldsBelow = false;
+						}
+						if (specialFieldsBelow) {
+							var indexBeforeMoreFields = 1
+						} else {
+							var indexBeforeMoreFields = 0
+						}
+	
+						console.log(mainnode.nodeName + ' - ' + indexBeforeMoreFields.toString())
+	
+						for (k = 0; k < mainnode.children.length; k++) {
+							console.log(mainnode.nodeName+'#'+k.toString())
+							var subnode = mainnode.children[k];
+	
+							// At this level, multiple sub-elements will only mean repeated groups (I think)
+							
+							if (k > indexBeforeMoreFields) {	
+								// add fields to the group on the form, starting with 2nd (or 3rd...) subnode
+								console.log(k.toString()+' '+"div[title='"+mainnode.nodeName+"']");
+								var d = $("div[title='"+mainnode.nodeName+"']").find(".tag-group:last").clone();
+								console.log(d);
+								$(d).find("input,select").val("");
+								$(d).find("input + button.delete.element").each(function() {
+									$(this).prev("input").remove();
+									$(this).remove(); 
+								});
+								$("<button/>", {
+									"class": "delete group",
+									type: "button",
+									text: "-"
+								}).appendTo($(d).find(".tag:first"));
+								//$("#"+mainnode.nodeName).append('<hr class="group-divider"/>');
+								$('<hr class="group-divider"/>').appendTo($("div[title='"+mainnode.nodeName+"']"));
+								d.appendTo($("div[title='"+mainnode.nodeName+"']"));
+							}
+						
+							for (m = 0; m < subnode.attributes.length; m++){
+								attr = subnode.attributes[m];
+								if (subnode.nodeName == 'date' && attr.name == 'dateType' && attr.value == 'Available') {
+									console.log('found available date: ' + subnode.childNodes[0].nodeValue);
+									specialValue = true;
+								}
+								console.log(subnode.nodeName + ' ' + attr.name);
+								if (specialValue && !specialValueDone) {
+									var jdest = $('div[title="' + subnode.nodeName + '"]:first').find('input[title="' + attr.name + '"]:last');
+								} else {
+									var jdest = $('div[title="' + subnode.nodeName + '"]:last').find('input[title="' + attr.name + '"]:last');
+								}
+								
+								console.log(jdest);
+								jdest.val(attr.value);
+								// now process information that must be translated as a selector value
+								possibleSelector = reverseOptionTitles[attr.name];
+								console.log('trying to find selector for ' + attr.name);
+								console.log('/' + possibleSelector + '/ => ' + attr.value);
+								if (possibleSelector) {
+									var jdest = $('div[title="' + subnode.nodeName +
+								 		'"]:last').find('select[title="' + possibleSelector + '"]:last');
+	
+									if (jdest.find("[value='" + attr.value + "']").length > 0) {
+										jdest.val(attr.value);
+									} else {
+										console.log('selector problem');
+										load_errors += "<li>SN " + subnode.nodeName + "/" + attr.name + ": unknown value " + attr.value + "</li>";
+									}
+									//jdest.val(attr.value);
+								}
+							}
+							if (subnode.childNodes.length == 1) {
+								console.log(subnode.nodeName + ' value: ' + subnode.childNodes[0].nodeValue);
+								if (specialValue && !specialValueDone) {
+									var jtarget = 'input[title="' + subnode.nodeName + '"]:first';
+									// lower the specialValue & mark as done
+									specialValue = false;
+									specialValueDone = true;
+								} else {
+									var jtarget = 'input[title="' + subnode.nodeName + '"]:last';
+									specialValue = false;
+								}
+								$(jtarget).val(subnode.childNodes[0].nodeValue);
+								// At least for rights, the main tag is entered using a selector; let's try this
+								var jtarget = 'select[title="' + reverseOptionTitles[subnode.nodeName] + '"]:last';
+								
+								$(jtarget).val(subnode.childNodes[0].nodeValue);
+								// get extra metadata from the attributes
+	
+								// Do we actually need this?? 
+								/*
+								for (m = 0; m < subnode.attributes.length; m++){
+									attr = subnode.attributes[m];
+									console.log(subnode.nodeName + ' ' + attr.name);
+									var jdest = $('div[title="' + subnode.nodeName + '"]:last').find('input[title="' + attr.name + '"]:last');
+									console.log(jdest);
+									jdest.val(attr.value);
+									// now process information that must be translated as a selector value
+									possibleSelector = reverseOptionTitles[attr.name];
+									console.log(attr.name);
+									console.log(possibleSelector);
+									if (possibleSelector) {
+										var jdest = $('div[title="' + subnode.nodeName + '"]:last').find('select[title="' + possibleSelector + '"]:last');
+	
+										if (jdest.find("[value='" + attr.value + "']").length > 0) {
+											jdest.val(attr.value);
+										} else {
+											console.log('selector problem');
+											load_errors += "<li>" + subnode.nodeName + "/" + attr.name + ": unknown value " + attr.value + "</li>"
+										}
+										//jdest.val(attr.value);
+									}
+								}
+								*/
+							}
+	
+							// BUG we still have a few extra affiliations and identifiers created for the 2nd creator...
+							// CONTRIBUTOR affiliations were added, how fun.
+							console.log('subfield: ' + subnode.nodeName);
+							var repeat = 0;
+							for (l = 0; l < subnode.children.length ;l++) {
+								console.log(subnode.nodeName+'#'+l.toString())
+								var subsubnode = subnode.children[l];
+	
+	
+								var formsubblocks = $("div[title='"+subnode.nodeName+"']:last").find("div[title='"+subsubnode.nodeName+"']").length;
+								console.log('Available formsubblocks: ' + formsubblocks.toString());
+	
+								if (repeat == 0) {
+									for (m = 1; m < formsubblocks; m++) {
+										var excessblock = $("div[title='"+subnode.nodeName+"']:last").find("div[title='"+subsubnode.nodeName+"']:last");
+										excessblock.remove();
+										console.log('removed one extra block of type '+subsubnode.nodeName);
+									}
+	
+								}
+								
+								// Careful: some items can be repeated and some cannot!
+								// We'll have a problem is they are not sorted by type, but let's worry about it later
+								if (l > 1 && subsubnode.nodeName == subnode.children[l-1].nodeName) {
+									repeat++;
+									
+									console.log(l.toString()+' '+"div[title='"+subsubnode.nodeName+"']");
+	
+									var c = $("div[title='"+subnode.nodeName+"']:last").find("div[title='"+subsubnode.nodeName+"']:last").clone();
+									console.log(c);
+									$(c).find("input,select").val("");
+	
+									$("div[title='"+mainnode.nodeName+"']:last").find("div[title='"+subnode.nodeName+"']:last").find("div[title='"+subsubnode.nodeName+"']:last").append($("<button/>", {
+								  		"class": "delete single-tag",
+								  		type: "button",
+								  		text: "-"
+									}));
+	
+									// remove "add" button
+									$("div[title='"+mainnode.nodeName+"']:last").find("div[title='"+subnode.nodeName+"']:last").find("div[title='"+subsubnode.nodeName+"']:last").find("button.add.single-tag").remove();
+	
+									// the new element is added after the last element of the same type, not at the end of the parent
+									c.insertAfter($("div[title='"+mainnode.nodeName+"']:last").find("div[title='"+subnode.nodeName+"']:last").find("div[title='"+subsubnode.nodeName+"']:last"));
+								
+									
+								} else {
+									repeat = 0;
+								}
+	
+								
+								if (subsubnode.childNodes.length == 1) {
+									console.log(subnode.nodeName + ' subsubfield value: ' + subsubnode.childNodes[0].nodeValue);
+									var jtarget = 'input[title="' + subsubnode.nodeName + '"]:last';
+									console.log(jtarget);
+									$('.tag[title="' + subnode.nodeName + '"]:last' ).find(jtarget).val(subsubnode.childNodes[0].nodeValue);
+									for (m = 0; m < subsubnode.attributes.length; m++){
+										attr = subsubnode.attributes[m];
+										console.log(subsubnode.nodeName + ' ' + attr.name);
+										jtarget = 'input[title="' + attr.name + '"]:last';
+										var jdest = $('div[title="' + subnode.nodeName + '"]:last').find('div[title="' + subsubnode.nodeName + '"]:last').find('input[title="' + attr.name + '"]:last');
+										console.log(jdest);
+										jdest.val(attr.value);
+										// now process information that must be translated as a selector value
+										possibleSelector = reverseOptionTitles[attr.name];
+										console.log('trying to find selector for ' + attr.name);
+										console.log('/' + possibleSelector + '/ => ' + attr.value);
+										if (possibleSelector) {
+											var jdest = $('div[title="' + subnode.nodeName + '"]:last').find('div[title="' + subsubnode.nodeName + '"]:last').find('select[title="' + possibleSelector + '"]:last');
+											if (jdest.find("[value='" + attr.value + "']").length > 0) {
+												jdest.val(attr.value);
+											} else {
+												console.log('selector problem');
+												load_errors += "<li>" + subsub.nodeName + "/" + attr.name + ": unknown value " + attr.value + "</li>";
+											}
+											// jdest.val(attr.value);
+										}
+									}
+								}
+								console.log('sub-subfield: ' + subsubnode.nodeName);
+	
+								// Descent into the unknown: geolocation fields....
+								repeat_polygon_points = 0;
+								for (n = 0; n < subsubnode.children.length ;n++) {
+									console.log(subsubnode.nodeName+'#'+n.toString())
+									var subsubsubnode = subsubnode.children[n];
+	
+	
+									var formsubblocks = $("div[title='"+subsubnode.nodeName+"']:last").find("div[title='"+subsubsubnode.nodeName+"']").length;
+									console.log('Available formsubsubblocks: ' + formsubblocks.toString());
+	
+									if (repeat_polygon_points == 0) {
+										for (m = 4; m < formsubblocks; m++) {
+											var excessblock = $("div[title='"+subsubnode.nodeName+"']:last").find("div[title='"+subsubsubnode.nodeName+"']:last");
+											excessblock.remove();
+											console.log(m.toString() + 'SSS: removed one extra block of type '+subsubsubnode.nodeName);
+										}
+	
+									}
+								
+									// Is the initial number of items 1 or 4, here? I thougt 1 (if even relevant)
+									// The "-" and "+" buttons are oddly placed 
+									if (n > 3 && subsubsubnode.nodeName == subsubnode.children[n-1].nodeName) {
+										console.log(n.toString() + ': need to add a subsubsub...node');
+										repeat_polygon_points++;
+									
+										console.log(n.toString()+' '+"div[title='"+subsubsubnode.nodeName+"']");
+	
+										var c = $("div[title='"+subsubnode.nodeName+"']:last").find("div[title='"+subsubsubnode.nodeName+"']:last").clone();
+										console.log(c);
+										$(c).find("input,select").val("");
+	
+										$("div[title='"+mainnode.nodeName+"']:last").find("div[title='"+subsubnode.nodeName+"']:last").find("div[title='"+subsubsubnode.nodeName+"']:last").append($("<button/>", {
+								  			"class": "delete single-tag",
+								  			type: "button",
+								  			text: "-"
+										}));
+	
+										// remove "add" button
+										$("div[title='"+mainnode.nodeName+"']:last").find("div[title='"+subsubnode.nodeName+"']:last").find("div[title='"+subsubsubnode.nodeName+"']:last").find("button.add.single-tag").remove();
+	
+										// the new element is added after the last element of the same type, not at the end of the parent
+										c.insertAfter($("div[title='"+mainnode.nodeName+"']:last").find("div[title='"+subsubnode.nodeName+"']:last").find("div[title='"+subsubsubnode.nodeName+"']:last"));
+								
+									
+									} else {
+										repeat_polygon_points = 0;
+									}
+	
+									/*
+									for (m = 0; m < subsubsubnode.attributes.length; m++){
+										attr = subsubsubnode.attributes[m];
+										console.log(subsubsubnode.nodeName + ' ' + attr.name);
+										possibleSelector = reverseOptionTitles[attr.name];
+										console.log('trying to find selector for ' + attr.name);
+										console.log('/' + possibleSelector + '/ => ' + attr.value);
+										if (possibleSelector) {
+											var jdest = $('div[title="' + subsubsubnode.nodeName +
+								 				'"]:last').find('select[title="' + possibleSelector + '"]:last');
+											if (jdest.find("[value='" + attr.value + "']").length > 0) {
+												jdest.val(attr.value);
+											} else {
+												console.log('selector problem');
+												load_errors += "<li>" + subsubsubnode.nodeName + "/" + attr.name + ": unknown value " + attr.value + "</li>";
+											}
+											//jdest.val(attr.value);
+										}
+									}
+									*/
+									if (subsubsubnode.childNodes.length == 1) {
+										console.log(subsubsubnode.nodeName + ' subsubsubfield value: ' + subsubsubnode.childNodes[0].nodeValue);
+										var jtarget = 'input[title="' + subsubsubnode.nodeName + '"]:last';
+										console.log(jtarget);
+										$('.tag[title="' + subsubnode.nodeName + '"]:last' ).find(jtarget).val(subsubsubnode.childNodes[0].nodeValue);
+										for (m = 0; m < subsubsubnode.attributes.length; m++){
+											attr = subsubsubnode.attributes[m];
+											console.log(subsubsubnode.nodeName + ' ' + attr.name);
+											jtarget = 'input[title="' + attr.name + '"]:last';
+											var jdest = $('div[title="' + subsubnode.nodeName + '"]:last').find('div[title="' + subsubsubnode.nodeName + '"]:last').find('input[title="' + attr.name + '"]:last');
+											console.log(jdest);
+											jdest.val(attr.value);
+											// now process information that must be translated as a selector value
+											possibleSelector = reverseOptionTitles[attr.name];
+											console.log('trying to find selector for ' + attr.name);
+											console.log('/' + possibleSelector + '/ => ' + attr.value);
+											if (possibleSelector) {
+												var jdest = $('div[title="' + subsubnode.nodeName + '"]:last').find('div[title="' + subsubsubnode.nodeName + '"]:last').find('select[title="' + possibleSelector + '"]:last');
+												if (jdest.find("[value='" + attr.value + "']").length > 0) {
+													jdest.val(attr.value);
+												} else {
+													console.log('selector problem');
+													load_errors += "<li>" + subsub.nodeName + "/" + attr.name + ": unknown value " + attr.value + "</li>";
+												}
+												// jdest.val(attr.value);
+											}
+										}
+									}
+									console.log('sub-sub-subfield: ' + subsubsubnode.nodeName);
+	
+									// Descent into the unknown: geolocation polygon summits....
+									for (p = 0; p < subsubsubnode.children.length ;p++) {
+										console.log(subsubsubnode.nodeName+'#'+p.toString())
+										var subsubsubsubnode = subsubsubnode.children[p];
+	
+	
+										var formsubsubsubblocks = $("div[title='"+subsubsubnode.nodeName+"']:last").find("div[title='"+subsubsubsubnode.nodeName+"']").length;
+										console.log('Available formsubsubsubblocks: ' + formsubsubsubblocks.toString());
+										/*
+										if (repeat == 0) {
+											for (m = 1; m < formsubblocks; m++) {
+												var excessblock = $("div[title='"+subsubsubnode.nodeName+"']:last").find("div[title='"+subsubsubsubnode.nodeName+"']:last");
+												excessblock.remove();
+												console.log(m.totring() + 'SSSS: removed one extra block of type '+subsubsubsubnode.nodeName);
+											}
+	
+										} */ //not needed here?
+								
+										// Is the initial number of items 1 or 4, here? I thought 4
+										if (p > 1 && subsubsubsubnode.nodeName == subsubsubnode.children[p-1].nodeName) {
+											repeat++;
+									
+											console.log(p.toString()+' '+"div[title='"+subsubsubsubnode.nodeName+"']");
+	
+											var c = $("div[title='"+subsubsubnode.nodeName+"']:last").find("div[title='"+subsubsubsubnode.nodeName+"']:last").clone();
+											console.log(c);
+											$(c).find("input,select").val("");
+	
+											$("div[title='"+mainnode.nodeName+"']:last").find("div[title='"+subsubsubnode.nodeName+"']:last").find("div[title='"+subsubsubsubnode.nodeName+"']:last").append($("<button/>", {
+								  					"class": "delete single-tag",
+								  					type: "button",
+								  				text: "-"
+											}));
+	
+											// remove "add" button
+											$("div[title='"+mainnode.nodeName+"']:last").find("div[title='"+subsubsubnode.nodeName+"']:last").find("div[title='"+subsubsubsubnode.nodeName+"']:last").find("button.add.single-tag").remove();
+	
+											// the new element is added after the last element of the same type, not at the end of the parent
+											c.insertAfter($("div[title='"+mainnode.nodeName+"']:last").find("div[title='"+subsubsubnode.nodeName+"']:last").find("div[title='"+subsubsubsubnode.nodeName+"']:last"));
+								
+									
+										} else {
+											repeat = 0;
+										}
+	
+	
+										if (subsubsubsubnode.childNodes.length == 1) {
+											console.log(subsubsubsubnode.nodeName + ' subsubsubsubfield value: ' + subsubsubsubnode.childNodes[0].nodeValue);
+											var jtarget = 'input[title="' + subsubsubsubnode.nodeName + '"]:last';
+											// console.log(jtarget);
+											$('.tag[title="' + subsubsubnode.nodeName + '"]').eq(n).find(jtarget).val(subsubsubsubnode.childNodes[0].nodeValue);
+										
+										}
+										console.log('sub-sub-sub-subfield: ' + subsubsubsubnode.nodeName);
+	
+									}
+								}
+							}
+						}
+					
+					}
+					// Update the XML preview
+					var xml = header;
+					$("div.section").each(function() {
+						xml += process($(this));
+					});
+					xml += ct("resource");
+					if (load_errors != '') {
+						console.log('we have errors');
+						$("div.right.load_errors").find('.error_list').append('The following items were not read properly, make sure you check the corresponding form fields (note: these warnings will remain even if you update the values on the form): <ul>' + load_errors + '</ul>');
+						$(".right.load_errors").show();
+					}
+					metadata = xml;
+					$("div.right code").text(xml);
+					$("div.right.metadata").show();
+	            };
+	
+	            reader.readAsText(f);
+	            
+	        }
+	        
+	    }
+	    
+	    
+	
+		</script>
+	
+		<style>
+			body{
+				font-family:sans-serif
+			}
+			.hidden{
+				display:none
+			}
+			.visible{
+				display:block
+			}
+			.input-field{
+				margin-bottom:2px
+			}
+			.unbounded-width{
+				width:79%
+			}
+			.full-width{
+				width:91%
+			}
+			input.half-width{
+				width:45%
+			}
+			input.half-width-smaller{
+				width:43%
+			}
+			input.language{
+				width: 13%
+			}
+			select.half-width{
+				width:47%
+			}
+			.tag-group-label{
+				float:left;
+				margin-top:2px;
+				width: 90%
+			}
+			.tag-subgroup-label{
+				float:left;
+				margin-top:0px;
+				width: 75%
+			}
+			.left{
+				float:left
+			}
+			.right{
+				float:right
+			}
+			div.left{
+				width:49%
+			}
+			div.right{
+				width:50%
+			}
+			div.form{
+				padding:12px
+			}
+			div.form div{
+				width:100%;
+				display:inline
+			}
+			div.tag{
+				margin-bottom:4px
+			}
+			div.tag-group input:nth-last-of-type(1),div.tag-group select:nth-last-of-type(1){
+				margin-bottom:8px
+			}
+			input,select{
+				border-radius:4px;
+				border-style:solid;
+				border-width:1px;
+				margin-bottom:2px;
+				margin-top:0;
+				min-height:18px!important;
+				padding:4px
+			}
+			.right button{
+				margin:2px;
+				float:right
+			}
+			button.add,button.delete{
+				width:1.8em;
+				font-weight:400;
+				margin-left:4px;
+				text-align:center;
+			}
+			button.group{
+				float:right;
+				margin-top:3px
+			}
+			button.element{
+				margin-left:5px
+			}
+			button:hover{
+				background-position:0 -15px;
+				outline-offset:-6px;
+				text-decoration:none;
+				transition:background-position 0.1s linear 0s
+			}
+			input:focus,select:focus{
+				border-color:#176ca7;
+				box-shadow:0 1px 1px rgba(0, 0, 0, 0.05) inset, 0 0 8px #99cdf1;
+				transition:border 0.2s linear 0s, box-shadow 0.2s linear 0s
+			}
+	
+			div.left > div,div.right > div{
+				background:none repeat scroll 0 center #f6f6f6;
+				color:#222 !important;
+				outline:1px solid gainsboro
+			}
+			
+			div.right h3{
+				background-color:#666;
+				background-image:linear-gradient(#666666, #545454);
+				background-repeat:repeat-x;
+				background-size:100% auto;
+				border-collapse:collapse;
+				border-spacing:0;
+				border-top-left-radius:4px;
+				border-top-right-radius:4px;
+				color:#fff;
+				direction:ltr;
+				font-family:sans-serif;
+				font-size:12.8px;
+				font-weight:700;
+				line-height:19.2px;
+				margin:0 0 1px;
+				padding:5px 10px;
+				text-align:left;
+				text-shadow:#222 0 1px 1px;
+				vertical-align:bottom
+			}
+			div.right.load_errors h3{
+				background-color:#ffffff;
+				background-image:linear-gradient(#17a2b8, #18b2c8);
+				background-repeat:repeat-x;
+				background-size:100% auto;
+				border-collapse:collapse;
+				border-spacing:0;
+				border-top-left-radius:4px;
+				border-top-right-radius:4px;
+				color:white;
+				direction:ltr;
+				font-family:sans-serif;
+				font-size:12.8px;
+				font-weight:700;
+				line-height:19.2px;
+				margin:0 0 1px;
+				padding:5px 10px;
+				text-align:left;
+				text-shadow:#222 0 1px 1px;
+				vertical-align:bottom
+			}
+			
+			div.left h3{
+				background-color:#176ca7;
+				background-image:linear-gradient(#176ca7, #135888);
+				background-repeat:repeat-x;
+				background-size:100% auto;
+				border-collapse:collapse;
+				border-spacing:0;
+				border-top-left-radius:4px;
+				border-top-right-radius:4px;
+				color:#fff;
+				direction:ltr;
+				font-family:sans-serif;
+				font-size:12.8px;
+				font-weight:700;
+				line-height:19.2px;
+				margin:0 0 1px;
+				padding:5px 10px;
+				text-align:left;
+				text-shadow:#222 0 1px 1px;
+				vertical-align:bottom
+			}
+			.main input,.main select{
+				border-color: red;
+				border-style:solid;
+				border-width:1px;
+				border-radius:5px;
+			}
+			.main-off input,.main-off select{
+				border-color: none;
+				border-width:1px;
+				border-radius:5px;
+				-webkit-transition:all 0.1s linear 0s, border-color 0s;
+				transition:all 0.1s linear 0s, border-color 0s
+			}
+			.remove-highlight input,.remove-highlight select{
+				/* border-color:rgb(239, 6, 6); */
+				border-color:rgb(255,173,0);
+				border-style:solid;
+				border-width:1px;
+				border-radius:5px;
+				-webkit-transition:all 0.1s linear 0s, border-color 0s;
+				transition:all 0.1s linear 0s, border-color 0s
+			}
+			button:hover,h3.other:hover,h3.recommended:hover{
+				cursor:pointer
+			}
+			h1,h2{
+				color:#0084b9
+			}
+			span.divider{
+				border-bottom:1px gainsboro solid;
+				float:left;
+				line-height:3px;
+				margin-bottom:5px;
+				width:100%
+			}
+			pre{
+				white-space:pre-wrap;
+				word-wrap:break-word
+			}
+			span.output{
+				float:left
+			}
+			button{
+				-moz-text-blink:none;
+				-moz-text-decoration-color:#fff;
+				-moz-text-decoration-line:none;
+				-moz-text-decoration-style:solid;
+				background-color:#176ca7;
+				background-image:linear-gradient(#176ca7, #114f7a);
+				background-repeat:repeat-x;
+				background-size:100% auto;
+				border-bottom-color:#0b324d;
+				border-bottom-left-radius:4px;
+				border-bottom-right-radius:4px;
+				border-bottom-style:solid;
+				border-bottom-width:1px;
+				border-collapse:collapse;
+				border-left-color:#0e4164;
+				border-left-style:solid;
+				border-left-width:1px;
+				border-right-color:#0e4164;
+				border-right-style:solid;
+				border-right-width:1px;
+				border-spacing:0;
+				border-top-color:#0e4164;
+				border-top-left-radius:4px;
+				border-top-right-radius:4px;
+				border-top-style:solid;
+				border-top-width:1px;
+				box-shadow:rgba(255, 255, 255, 0.2) 0 1px 0 0 inset, rgba(0, 0, 0, 0.05) 0 1px 2px 0;
+				color:#fff;
+				cursor:pointer;
+				direction:ltr;
+				display:table-cell;
+				font-family:Arial, Verdana, Helvetica, sans-serif;
+				font-size:13.3333px;
+				font-weight:400;
+				line-height:16px;
+				padding:0px 0px 0px 0px;
+				text-align:center;
+				text-decoration:none;
+				text-shadow:#222 0 1px 1px;
+				vertical-align:middle
+			}
+			button.delete,button#reset{
+				background-color:rgb(255,173,0);
+				background-image:linear-gradient(rgb(255,173,0), rgb(255,0,0));
+				border-bottom-color:rgb(255,0,0);
+				border-left-color:rgb(173,0,0);
+				border-right-color:rgb(173,0,0);
+				border-top-color:rgb(255,173,0);
+			}
+			button#reset{
+				float: left;
+			}
+			a:link {
+				text-decoration: none;
+				color: #3784b9;
+				float: right;
+			}
+			a.tag-group-info {
+				/* display:inline-block; */
+				display: none;
+				margin-top:0px;
+				margin-bottom: 0px;
+				-moz-text-blink:none;
+				-moz-text-decoration-color:#fff;
+				-moz-text-decoration-line:none;
+				-moz-text-decoration-style:solid;
+				background-color:#3784b9;
+				background-image:linear-gradient(#176ca7, #3784b9);
+				background-repeat:repeat-x;
+				background-size:100% auto;
+				border-bottom-color:#3784b9;
+				border-bottom-left-radius:4px;
+				border-bottom-right-radius:4px;
+				border-bottom-style:solid;
+				border-bottom-width:1px;
+				border-collapse:collapse;
+				border-left-color:#3784b9;
+				border-left-style:solid;
+				border-left-width:1px;
+				border-right-color:#3784b9;
+				border-right-style:solid;
+				border-right-width:1px;
+				border-spacing:0;
+				border-top-color:#3784b9;
+				border-top-left-radius:4px;
+				border-top-right-radius:4px;
+				border-top-style:solid;
+				border-top-width:1px;
+				box-shadow:rgba(255, 255, 255, 0.2) 0 1px 0 0 inset, rgba(0, 0, 0, 0.05) 0 1px 2px 0;
+				color:#fff;
+				cursor:pointer;
+				direction:ltr;
+				font-family:Arial, Verdana, Helvetica, sans-serif;
+				font-size:10px;
+				font-weight:400;
+				line-height:16px;
+				padding:0px 10px 0px 10px;
+				text-align:center;
+				text-decoration:none;
+				text-shadow:#222 0 1px 1px;
+				vertical-align:middle
+			}
+			a.tag-group-info-language {
+				display: none;
+				margin:4px 10px 10px 10px;
+				width: 1%;
+				/*display:inline-block;*/
+				-moz-text-blink:none;
+				-moz-text-decoration-color:#fff;
+				-moz-text-decoration-line:none;
+				-moz-text-decoration-style:solid;
+				background-color:#3784b9;
+				background-image:linear-gradient(#176ca7, #3784b9);
+				background-repeat:repeat-x;
+				background-size:100% auto;
+				border-bottom-color:#3784b9;
+				border-bottom-left-radius:4px;
+				border-bottom-right-radius:4px;
+				border-bottom-style:solid;
+				border-bottom-width:1px;
+				border-collapse:collapse;
+				border-left-color:#3784b9;
+				border-left-style:solid;
+				border-left-width:1px;
+				border-right-color:#3784b9;
+				border-right-style:solid;
+				border-right-width:1px;
+				border-spacing:0;
+				border-top-color:#3784b9;
+				border-top-left-radius:4px;
+				border-top-right-radius:4px;
+				border-top-style:solid;
+				border-top-width:1px;
+				box-shadow:rgba(255, 255, 255, 0.2) 0 1px 0 0 inset, rgba(0, 0, 0, 0.05) 0 1px 2px 0;
+				color:#fff;
+				cursor:pointer;
+				direction:ltr;
+				display:inline-block;
+				font-family:Arial, Verdana, Helvetica, sans-serif;
+				font-size:10px;
+				font-weight:400;
+				line-height:16px;
+				padding:0px 10px 0px 10px;
+				text-align:center;
+				text-decoration:none;
+				text-shadow:#222 0 1px 1px;
+				vertical-align:middle
+			}
+			a:hover {
+				color: red;
+			}
+	    
+			#langinput {
+				float:left;
+			}
+			#langlink{
+				float:left;
+			}
+			#langlatest {
+				float:left;
+			}
+			#date{
+				margin-right: 76%;
+			}
+			hr.group-divider {
+				margin-top: 36px;
+				color: white;
+			}
+			input.main, select.main {
+				border-color: red;
+			}
+			div.versionstatement {
+				font-size: 12px;
+				font-style: italic;
+			}
+			a.intextlink{
+				float:none;
+			}
+		</style>
+	</head>
+	<body>
+	<h2 class="pagetitle">RDP DataCite Metadata Generator - Kernel 4.3</h2>
+	<div>
+		Contact: <a href="mailto:vincent.bayle11@ens-lyon.fr?subject=Metadata Generator question" style="float: none;">vincent.bayle11@ens-lyon.fr </a>Original work by Marcin Paluch & Alain Borel (alain.borel@epfl.ch)<br/><br/>
+        
+	</div>
+	<div>
+    
+		Elements are divided into 3 classes:
+		<ol>
+			<li>Mandatory elements that must be used in all cases<br/>
+			(missing values will cause blocking errors during the ingestion)</li>
+			<li>Recommended elements that would be good to have if possible</li>
+			<li>Optional elements that the users is free to use if they think it is useful</lu>
+		</ol>
+		Please note:
+		<ol>
+		<li>For complex elements (mandatory or not) that include several fields,<br/>
+		minimal information fields are designated in red. An input value <br/>
+		(text or selection) is required for these minimal fields.
+		<li>Text fields with pre-filled values should not be changed.</li>
+		</ol>
+	</div>
+	<div>
+		Load existing metadata.xml:&nbsp;
+	<input type="file" id="metadataxml" name="metadataxml" accept="text/xml">
+	<script type="text/javascript">
+	
+	</script>
+	</div>
+	<div class="left">
+		<h3 class="mandatory">Mandatory Elements</h3>
+		<div class="form mandatory">
+			<!-- Commented out due to ongoing discussion about identifiers AB 2020-11-10
+			<div class="section">
+				<span class="tag-group-label" title="DOI">DOI:
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#identifier" target="_blank"> ?</a>
+				</span>
+				<div class="tag-group">
+					<div title="identifier" class="tag">
+						<input class="input-field full-width tag-value" type="text" placeholder="[e.g. 10.9999/1234567.89]" title="identifier" value="" />
+						<input class="input-field tag-attribute" type="hidden" title="identifierType" value="DOI" />
+					</div>
+				</div>
+			</div>
+		
+			<span class="divider">&nbsp;</span>
+			-->
+            
+           
+			<div title="titles" class="section wrapper-tag">
+				<span class="tag-group-label">Title(s):
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#title" target="_blank"> ? </a>
+				</span>
+				<button type="button" class="add group">+</button>
+				<div class="tag-group">
+					<div title="title" class="tag">
+						<input class="full-width input-field tag-value main" type="text" placeholder="[Dataset title]" title="title" value="" />
+						<input class="full-width input-field tag-attribute" type="text" placeholder="[DOI]" title="DOI" value="" />
+						<select class="type half-width input-field tag-attribute" id = "RessourceType" title="RessourceType"></select>
+                        <select class="type half-width input-field tag-attribute" id = "CurrentStatus" title="CurrentStatus"></select>
+					</div>
+				</div>
+			</div>
+            
+			<span class="divider">&nbsp;</span>
+			<div title="creators" class="section wrapper-tag">
+				<span class="tag-group-label">Creator(s):
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#creator" target="_blank"> ? </a>
+				</span>
+				<button type="button" class="add group">+</button>
+				<div class="tag-group">
+					<div title="creator" class="tag">
+						<div title="givenName" class="tag">
+							<input class="half-width input-field tag-value main" type="text" placeholder="[GIVEN NAME as Vincent]" title="givenName" value="" />
+						</div>
+						<div title="familyName" class="tag">
+							<input class="half-width input-field tag-value main" type="text" placeholder="[FAMILY NAME as Bayle]" title="familyName" value="" />
+                        <select class="half-width input-field tag-attribute" title="contributorType"></select>
+						</div>                       
+						<div title="nameIdentifier" class="tag">
+							<input class="half-width input-field tag-value" type="text" placeholder="[ORCID]" title="nameIdentifier" value="" />
+                        </div>                          
+                    </div> 
+                 </div>         
+            </div>       	
+         <span class="divider">&nbsp;</span>
+			<div class="section">
+				<span class="tag-group-label"> Affiliation:
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#publisher" target="_blank"> ? </a>
+				</span>
+				<div class="tag-group">
+					<div title="publisher" class="tag">
+						<input type="text" class="full-width input-field tag-value main" placeholder="[PUBLISHER]" title="publisher" value="Laboratoire Reproduction et Développement des Plantes" />
+						<input class="half-width input-field tag-attribute main" type="text" placeholder="[LabID]" title="Laboratory" value="UMR5667" />                 
+                      		<select class="half-width input-field tag-attribute" title="CreatorAffiliation"></select>						
+                            <select class="half-width input-field tag-attribute" type="text" title="RDPteam" ></select>
+					</div>
+				</div>
+			</div>        
+            
+		<span class="divider">&nbsp;</span>
+			<div class="section">
+				<span class="tag-group-label">Publication Year:
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#publicationyear" target="_blank">?</a>
+				</span>
+				<div class="tag-group">
+					<div title="publicationYear" class="tag">
+						<input type="text" class="full-width input-field tag-value " placeholder="[YYYY]" title="publicationYear" pattern="[0-9]{4}" value="" />
+                        <input type="text" class="full-width input-field tag-attribute " placeholder="[Link]" title="Link"  value="" />
+					</div>
+				</div>
+			</div>
+           
+		<span class="divider">&nbsp;</span>
+			<div class="section">
+				<span class="tag-group-label">Storage:
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#publicationyear" target="_blank">?</a>
+				</span>
+				<div class="tag-group">
+					<div title="date" class="tag">
+						<input class="half-width input-field tag-value main currentdate" type="text" placeholder="[DATE as YYYY-MM-DD]" title="date"/>
+                   		<input type="text" class="full-width input-field tag-attribute " placeholder="[Storage (Calculus, HardDrive, etc...]" title="Storage"  value="" />
+					</div>
+				</div>
+			</div> 
+			<span class="divider">&nbsp;</span>
+			<div class="section">
+				<span class="tag-group-label">Resource Type (enter Dataset in both fields unless other values are really needed):
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#resourcetype" target="_blank">?</a>
+				</span>
+				<div class="tag-group">
+					<div title="resourceType" class="tag allow-empty">
+						<input class="half-width input-field tag-value " type="text" placeholder="[RESOURCE TYPE as free text]" title="resourceType" value="Dataset" />
+						<select class="half-width input-field tag-attribute " title="Type of data. Only use Dataset for now"></select>
+					</div>
+				</div>
+			</div>
+            
+			<span class="divider">&nbsp;</span>
+			<div title="Project" class="section wrapper-tag">
+				<span class="tag-group-label">Project:
+				
+				</span>
+				<button type="button" class="add group">+</button>
+				<div class="tag-group">
+					<div title="subject" class="tag">
+                    	<input class="half-width input-field tag-attribute" type="text" placeholder="[Founding]" title="Founding" value="" />
+						<input class="half-width input-field tag-value main" type="text" placeholder="[Project]" title="subject" value="" />
+					              
+					</div>
+				</div>
+			</div>
+         </div>   
+            <span class="divider">&nbsp;</span>
+			<div title="descriptions" class="section wrapper-tag">
+				<span class="tag-group-label">Description:
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#description" target="_blank"> ? </a>
+				</span>
+				<button type="button" class="add group">+</button>
+				<div class="tag-group">
+					<div title="description" class="tag">
+						<input class="half-width input-field tag-value main" type="text" placeholder="[Experimental Setup]" title="description" value="" />
+						<select class="half-width input-field tag-attribute " title="Imaging_method"></select>
+                        <select class="half-width input-field tag-attribute " title="Imaging_instrument"></select>
+                        <select class="half-width input-field tag-attribute " title="Imaging_Format"></select>
+					</div>
+				</div>
+			</div>
+            
+            <span class="divider">&nbsp;</span>
+			<div title="ImgAnalysis" class="section wrapper-tag">
+				<span class="tag-group-label">ImageAnalysisPipeline:
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#ImgAnalysis" target="_blank"> ? </a>
+				</span>
+				<button type="button" class="add group">+</button>
+				<div class="tag-group">
+					<div title="ImgAnalysisPipeline" class="tag">
+						<input class="half-width input-field tag-value main" type="text" placeholder="[Pipeline]" title="ImgAnalysisPipeline" value="" />
+						<select class="half-width input-field tag-attribute " title="ImageAnalysisPipeline"></select>
+					</div>
+				</div>
+			</div>
+
+			<span class="divider">&nbsp;</span>
+			<div title="Stats" class="section wrapper-tag">
+				<span class="tag-group-label">StatisticalAnalysis:
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#Stats" target="_blank"> ? </a>
+				</span>
+				<button type="button" class="add group">+</button>
+				<div class="tag-group">
+					<div title="Stat" class="tag">
+						<input class="half-width input-field tag-value main" type="text" placeholder="[Pipeline]" title="Stat" value="" />
+						<select class="half-width input-field tag-attribute " title="StatisticalAnalysis"></select>
+					</div>
+				</div>
+			</div>
+            
+            
+            
+
+		<div class="versionstatement">
+			<br />
+			<br/>
+			Version 
+		</div>
+	</div>
+	<div class="right load_errors hidden">
+		<h3 class="results">Read errors</h3>
+		<div class="error_list">
+		</div>
+	</div>
+	<div class="right metadata hidden">
+		<h3 class="results">Metadata</h3>
+		<div class="form results">
+			<pre><code style="display:inline-block;"></code></pre>
+		</div>
+		<br />
+		<button type="button" id="download" onclick="save()">Save as file</button>
+		<button type="button" id="selectall">Select All</button>
+		<button type="button" id="reset">Reset</button>
+		<span class="output" id="output"></span>
+	</div>
+	</body>
+	</html>
+
