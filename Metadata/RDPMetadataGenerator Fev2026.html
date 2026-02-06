@@ -43,7 +43,7 @@
 	</script>
 	
 		<script type = "text/javascript" >
-			var generatorVersion = "20250103";
+			var generatorVersion = "20250206";
 			var kernelVersion = "4.3";
 			var kernelNamespace = "http://datacite.org/schema/kernel-4";
 			var kernelSchema = "https://schema.datacite.org/meta/kernel-4.3/metadata.xsd";
@@ -208,17 +208,6 @@
 				});
 			});
 			var optionValues = {};
-            optionValues["Imaging_method"] = ["Confocal", "Brightfield","EM","Dataset", "Other"];
-optionValues["Imaging_instrument"] = ["Binocular","Spinning", "LSM980", "SP8", "SEM","Macrofluo","Other"];
-optionValues["RDP Team"] = ["EvoDevo", "Mecano", "SiCE","SignHor","SeedDev","Mozaic","Morphoflo","Epichrom"]; 
-optionValues["Creator Affiliation"] = ["CNRS", "INRAe", "UCBL","ENS"]; 
-optionValues["RessourceType"] = ["Microscopy", "Sequences", "OMICS"];
-optionValues["Current status"] = ["Raw", "Analysed", "Published"]; 
-optionValues["contributorType"] = ["ContactPerson","ProjectLeader", "pHdStudent", "Post-Doc", "Engineer", "Other"]; 
-optionValues["Imaging_Format"] = ["XY", "XYZ", "XYT", "XYZT", "Other"]; 
-optionValues["Image Analysis Pipeline"] = ["FIJI", "Python", "Gnomon", "Ilastik", "Imaris", "Other"];
-optionValues["Statistical Analysis"] = ["R", "JASP", "Excel","Other"]; 
-
 			optionValues["descriptionType"] = ["Abstract", "Methods", "SeriesInformation", "TableOfContents", "TechnicalInfo", "Other"];
 			optionValues["relatedIdentifierType"] = ["ARK", "arXiv", "bibcode", "DOI", "EAN13", "EISSN", "Handle", "IGSN", "ISBN", "ISSN", "ISTC", "LISSN", "LSID", "PMID", "PURL", "UPC", "URL", "URN"];
 			optionValues["relationType"] = ["Describes", "IsDescribedBy", "HasPart", "IsPartOf", "HasMetadata", "IsMetadataFor",
@@ -235,6 +224,21 @@ optionValues["Statistical Analysis"] = ["R", "JASP", "Excel","Other"];
 			optionValues["affiliationIdentifierScheme"] = ["GRID", "ROR"];
 			optionValues["subjectScheme"] = ["DDC", "GND", "wikidata"];
 			optionValues["rights"] = ["Creative Commons Attribution 4.0", "Creative Commons Attribution Share-Alike 4.0", "CC0 1.0", "GNU General Public License 3.0", "BSD 3-Clause \"New\" or \"Revised\" License (BSD-3-Clause)", "MIT License"];
+            
+            
+            
+            //RDP optionValues
+            optionValues["Imaging_method"] = ["Confocal", "TIRFm","Brightfield","EM","Dataset", "Other"];
+			optionValues["Imaging_instrument"] = ["Binocular","SpinningDisk", "LSM980","Vertical 980","Vertical Spinning", "SP8", "SEM","Macrofluo","Other"];
+			optionValues["RDPteam"] = ["EvoDevo", "Mecano", "SiCE","SignHor","SeedDev","Mozaic","Morphoflo","Epichrom"]; 
+			optionValues["CreatorAffiliation"] = ["CNRS", "INRAe", "UCBL","ENS"]; 
+			optionValues["RessourceType"] = ["Microscopy", "Sequences", "OMICS"];
+			optionValues["CurrentStatus"] = ["Raw", "Analysed", "Published"]; 
+			optionValues["contributorType"] = ["ContactPerson","ProjectLeader", "pHdStudent", "Post-Doc", "ITA", "Other"]; 
+			optionValues["Imaging_Format"] = ["XY", "XYZ", "XYT", "XYZT", "Other"]; 
+			optionValues["ImageAnalysisPipeline"] = ["FIJI", "Python", "Gnomon", "Ilastik", "Imaris", "Other"];
+			optionValues["StatisticalAnalysis"] = ["R", "JASP", "Excel","Other"]; 
+
 			var optionRightsIdentifiers = {};
 			optionRightsIdentifiers["Creative Commons Attribution 4.0"] = "CC-BY-4.0";
 			optionRightsIdentifiers["Creative Commons Attribution Share-Alike 4.0"] = "CC-BY-SA-4.0";
@@ -265,7 +269,7 @@ optionValues["Statistical Analysis"] = ["R", "JASP", "Excel","Other"];
 			optionTitles["Date type (if none, publication date)"] = "dateType";
 			optionTitles["Title type (if not main)"] = "titleType";
             optionTitles["RessourceType"] = "RessourceType";
-            optionTitles["Current status"] = "Current status";
+            optionTitles["CurrentStatus"] = "CurrentStatus";
 			optionTitles["Identifier type. Crossref ID is recommended"] = "funderIdentifierType";
 			optionTitles["Default: personal name"] = "nameType";
 			optionTitles["Name identifier scheme (e.g. ORCID)"] = "nameIdentifierScheme";
@@ -273,12 +277,12 @@ optionValues["Statistical Analysis"] = ["R", "JASP", "Excel","Other"];
             
             optionTitles["Imaging_method"] = "Imaging_method";
             optionTitles["Imaging_instrument"] = "Imaging_instrument";
-            optionTitles["RDP Team"] = "RDP Team";
-            optionTitles["Creator Affiliation"] = "Creator Affiliation";
+            optionTitles["RDPteam"] = "RDPteam";
+            optionTitles["CreatorAffiliation"] = "CreatorAffiliation";
             optionTitles["contributorType"] = "contributorType";
 			optionTitles["Imaging_Format"] = "Imaging_Format";
-            optionTitles["Image Analysis Pipeline"] = "Image Analysis Pipeline";
-            optionTitles["Statistical Analysis"] = "Statistical Analysis";
+            optionTitles["ImageAnalysisPipeline"] = "ImageAnalysisPipeline";
+            optionTitles["StatisticalAnalysis"] = "StatisticalAnalysis";
 
             
             
@@ -1473,18 +1477,7 @@ optionValues["Statistical Analysis"] = ["R", "JASP", "Excel","Other"];
 			<span class="divider">&nbsp;</span>
 			-->
             
-            
-            <div title="DOI" class="section wrapper-tag">
-				<span class="tag-group-label">DOI:
-				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#title" target="_blank"> ? </a>
-				</span>
-                <div class="tag-group">
-					<div title="DOI" class="tag">
-						<input class="full-width input-field tag-value main" type="text" placeholder="[Doi nb]" title="title" value="" />
-						
-					</div>
-				</div>
-			</div>   
+           
 			<div title="titles" class="section wrapper-tag">
 				<span class="tag-group-label">Title(s):
 				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#title" target="_blank"> ? </a>
@@ -1493,12 +1486,13 @@ optionValues["Statistical Analysis"] = ["R", "JASP", "Excel","Other"];
 				<div class="tag-group">
 					<div title="title" class="tag">
 						<input class="full-width input-field tag-value main" type="text" placeholder="[Dataset title]" title="title" value="" />
-						
-						<select class="language half-width input-field tag-attribute" id = "RessourceType" title="RessourceType"></select>
-                        <select class="language half-width input-field tag-attribute" id = "Current status" title="Current status"></select>
+						<input class="full-width input-field tag-attribute" type="text" placeholder="[DOI]" title="DOI" value="" />
+						<select class="type half-width input-field tag-attribute" id = "RessourceType" title="RessourceType"></select>
+                        <select class="type half-width input-field tag-attribute" id = "CurrentStatus" title="CurrentStatus"></select>
 					</div>
 				</div>
 			</div>
+            
 			<span class="divider">&nbsp;</span>
 			<div title="creators" class="section wrapper-tag">
 				<span class="tag-group-label">Creator(s):
@@ -1507,61 +1501,59 @@ optionValues["Statistical Analysis"] = ["R", "JASP", "Excel","Other"];
 				<button type="button" class="add group">+</button>
 				<div class="tag-group">
 					<div title="creator" class="tag">
-						<div title="creatorName" class="tag">
-							<input class="half-width input-field tag-value main" type="text" placeholder="[CREATOR NAME as Bayle, Vincent]" title="creatorName" value="" />
-                            <input type="text" class="full-width input-field tag-value  main" placeholder="[PUBLISHER]" title="publisher" value="Reproduction et Développement des Plantes" />
-                              <select class="language half-width input-field tag-attribute main" id = "RDP Team" title="RDP Team"></select>
-                              <select class="language half-width input-field tag-attribute" id = "contributorType" title="contributorType"></select>
+						<div title="givenName" class="tag">
+							<input class="half-width input-field tag-value main" type="text" placeholder="[GIVEN NAME as Vincent]" title="givenName" value="" />
 						</div>
-						
+						<div title="familyName" class="tag">
+							<input class="half-width input-field tag-value main" type="text" placeholder="[FAMILY NAME as Bayle]" title="familyName" value="" />
+                        <select class="half-width input-field tag-attribute" title="contributorType"></select>
+						</div>                       
 						<div title="nameIdentifier" class="tag">
-							<input class="half-width input-field tag-value" type="text" placeholder="[NAME IDENTIFIER] (recommended)" title="nameIdentifier" value="" />
-							<select class="half-width input-field tag-attribute" type="text" title="Name identifier scheme (e.g. ORCID)" value="" />
-							
-						</div>
-						<div title="affiliation" class="tag" display="none">
-							 <select class="language half-width input-field tag-attribute" id = "Creator Affiliation" title="Creator Affiliation"></select>
-						</div>
+							<input class="half-width input-field tag-value" type="text" placeholder="[ORCID]" title="nameIdentifier" value="" />
+                        </div>                          
+                    </div> 
+                 </div>         
+            </div>       	
+         <span class="divider">&nbsp;</span>
+			<div class="section">
+				<span class="tag-group-label"> Affiliation:
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#publisher" target="_blank"> ? </a>
+				</span>
+				<div class="tag-group">
+					<div title="publisher" class="tag">
+						<input type="text" class="full-width input-field tag-value main" placeholder="[PUBLISHER]" title="publisher" value="Laboratoire Reproduction et Développement des Plantes" />
+						<input class="half-width input-field tag-attribute main" type="text" placeholder="[LabID]" title="Laboratory" value="UMR5667" />                 
+                      		<select class="half-width input-field tag-attribute" title="CreatorAffiliation"></select>						
+                            <select class="half-width input-field tag-attribute" type="text" title="RDPteam" ></select>
 					</div>
 				</div>
-			</div>
-
-			<span class="divider">&nbsp;</span>
+			</div>        
+            
+		<span class="divider">&nbsp;</span>
 			<div class="section">
 				<span class="tag-group-label">Publication Year:
 				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#publicationyear" target="_blank">?</a>
 				</span>
 				<div class="tag-group">
 					<div title="publicationYear" class="tag">
-						<input type="text" class="full-width input-field tag-value  " placeholder="[YYYY]" title="publicationYear" pattern="[0-9]{4}" value="" />
+						<input type="text" class="full-width input-field tag-value " placeholder="[YYYY]" title="publicationYear" pattern="[0-9]{4}" value="" />
+                        <input type="text" class="full-width input-field tag-attribute " placeholder="[Link]" title="Link"  value="" />
 					</div>
 				</div>
-                <span class="tag-group-label">Publication Link:
+			</div>
+           
+		<span class="divider">&nbsp;</span>
+			<div class="section">
+				<span class="tag-group-label">Storage:
 				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#publicationyear" target="_blank">?</a>
 				</span>
 				<div class="tag-group">
-					<div title="Link" class="tag">
-						<input type="text" class="full-width input-field tag-value  " placeholder="[Link]" title="Link" pattern="[0-9]{4}" value="" />
-					</div>
-				</div>
-			</div>
-			<span class="divider">&nbsp;</span>
-			<div title="dates" class="section wrapper-tag">
-				<span class="tag-group-label">MetaData creation:
-				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#date" target="_blank"> ?</a>
-				</span>
-				<div class="tag-group">
 					<div title="date" class="tag">
-						<input class="half-width input-field tag-value  currentdate" type="text" placeholder="[DATE as YYYY-MM-DD]" title="date"/>
-				
+						<input class="half-width input-field tag-value main currentdate" type="text" placeholder="[DATE as YYYY-MM-DD]" title="date"/>
+                   		<input type="text" class="full-width input-field tag-attribute " placeholder="[Storage (Calculus, HardDrive, etc...]" title="Storage"  value="" />
 					</div>
 				</div>
-				
-				<div class="tag-group">
-									
-					</div>
-				</div>
-			</div>
+			</div> 
 			<span class="divider">&nbsp;</span>
 			<div class="section">
 				<span class="tag-group-label">Resource Type (enter Dataset in both fields unless other values are really needed):
@@ -1574,57 +1566,69 @@ optionValues["Statistical Analysis"] = ["R", "JASP", "Excel","Other"];
 					</div>
 				</div>
 			</div>
+            
 			<span class="divider">&nbsp;</span>
-			<div title="Description" class="section wrapper-tag">
-				<span class="tag-group-label">Project
-				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#subject" target="_blank"> ? </a>
+			<div title="Project" class="section wrapper-tag">
+				<span class="tag-group-label">Project:
+				
 				</span>
 				<button type="button" class="add group">+</button>
 				<div class="tag-group">
 					<div title="subject" class="tag">
+                    	<input class="half-width input-field tag-attribute" type="text" placeholder="[Founding]" title="Founding" value="" />
 						<input class="half-width input-field tag-value main" type="text" placeholder="[Project]" title="subject" value="" />
-						<input class="half-width input-field tag-attribute" type="text" placeholder="[Founding]" title="Founding" value="" />
-                       
+					              
 					</div>
 				</div>
 			</div>
-			<span class="divider">&nbsp;</span>
+         </div>   
+            <span class="divider">&nbsp;</span>
 			<div title="descriptions" class="section wrapper-tag">
 				<span class="tag-group-label">Description:
 				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#description" target="_blank"> ? </a>
 				</span>
-                <select class="half-width input-field tag-attribute " title="Imaging_method"></select>
-                        <select class="half-width input-field tag-attribute " title="Imaging_instrument"></select>
-                        <select class="half-width input-field tag-attribute " title="Imaging_Format"></select>
+				<button type="button" class="add group">+</button>
 				<div class="tag-group">
 					<div title="description" class="tag">
-						<input class="half-width input-field tag-value " type="text" placeholder="[Experimental Setup]" title="description" value="" />
-                        <input class="half-width input-field tag-value " type="text" placeholder="[Plant Material]" title="description" value="" />
-                        <input class="half-width input-field tag-value " type="text" placeholder="[Additional infos]" title="description" value="" /><button type="button" class="add single-tag">+</button>
+						<input class="half-width input-field tag-value main" type="text" placeholder="[Experimental Setup]" title="description" value="" />
+						<select class="half-width input-field tag-attribute " title="Imaging_method"></select>
+                        <select class="half-width input-field tag-attribute " title="Imaging_instrument"></select>
+                        <select class="half-width input-field tag-attribute " title="Imaging_Format"></select>
+					</div>
 				</div>
-            </div>
-						
-                    <span class="divider">&nbsp;</span>
-			<div title="descriptions" class="section wrapper-tag">
-				<span class="tag-group-label">Analysis Pipeline:
-				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#description" target="_blank"> ? </a>
-				</span>
-                <div title="Image Analysis" class="tag allow-empty">
-                <select class="half-width input-field tag-attribute " title="Image Analysis Pipeline"></select><button type="button" class="add single-tag">+</button>
-                <input class="half-width input-field tag-value " type="text" placeholder="[Additional infos]" title="description" value="" />
-                </div>
-                <div title="Statistical Analysis" class="tag allow-empty">
-                <select class="half-width input-field tag-attribute" title="Statistical Analysis"></select><button type="button" class="add single-tag">+</button>
-                <input class="half-width input-field tag-value " type="text" placeholder="[Additional infos]" title="description" value="" />
-                </div>
-                        
-                        
-                                
 			</div>
-				
-			
-		
-		</div>
+            
+            <span class="divider">&nbsp;</span>
+			<div title="ImgAnalysis" class="section wrapper-tag">
+				<span class="tag-group-label">ImageAnalysisPipeline:
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#ImgAnalysis" target="_blank"> ? </a>
+				</span>
+				<button type="button" class="add group">+</button>
+				<div class="tag-group">
+					<div title="ImgAnalysisPipeline" class="tag">
+						<input class="half-width input-field tag-value main" type="text" placeholder="[Pipeline]" title="ImgAnalysisPipeline" value="" />
+						<select class="half-width input-field tag-attribute " title="ImageAnalysisPipeline"></select>
+					</div>
+				</div>
+			</div>
+
+			<span class="divider">&nbsp;</span>
+			<div title="Stats" class="section wrapper-tag">
+				<span class="tag-group-label">StatisticalAnalysis:
+				<a class="tag-group-info" href="https://github.com/UB-LMU/DataCite_BestPracticeGuide/blob/master/BestPracticeGuide.md#Stats" target="_blank"> ? </a>
+				</span>
+				<button type="button" class="add group">+</button>
+				<div class="tag-group">
+					<div title="Stat" class="tag">
+						<input class="half-width input-field tag-value main" type="text" placeholder="[Pipeline]" title="Stat" value="" />
+						<select class="half-width input-field tag-attribute " title="StatisticalAnalysis"></select>
+					</div>
+				</div>
+			</div>
+            
+            
+            
+
 		<div class="versionstatement">
 			<br />
 			<br/>
@@ -1649,3 +1653,4 @@ optionValues["Statistical Analysis"] = ["R", "JASP", "Excel","Other"];
 	</div>
 	</body>
 	</html>
+
