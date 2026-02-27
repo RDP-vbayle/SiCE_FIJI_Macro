@@ -18,7 +18,7 @@ getDimensions(width, height, channels, slices, frames);
 
 ///Kymograph to visualise shifts in acquisition
 
-	makeLine(300, 210, 2994, 210);
+makeLine(372, 180, 2960, 174);
 	run("Multi Kymograph", "linewidth=1");
 	makeRectangle(0, 0, 300, slices);
 	run("Crop");
@@ -29,6 +29,7 @@ getDimensions(width, height, channels, slices, frames);
 	findBoundaries(0,0,width,1,Var);
 	getSelectionCoordinates(xpoints, ypoints);
 	close("Kymograph-1");
+waitForUser("string");
 	DayBound=xpoints[0];
 	findBoundaries(0,0,3,height,10);
 	getSelectionCoordinates(xpoints, ypoints);
@@ -48,6 +49,7 @@ waitForUser("Y dark");
 	Array.getStatistics(xpoints, min, max, mean, stdDev);
 	close("Kymograph-1");
 	NightBound=min;
+	
 if (dbg==true) {
 run("Select None");
 makePoint(min,ypoint);
