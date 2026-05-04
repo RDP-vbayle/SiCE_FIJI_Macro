@@ -47,7 +47,7 @@ setBatchMode("exit and display");
 	Dialog.addCheckbox("Paired cells analysis?", true); /// For root architecture with abnormal cell division pattern ie abnormal cell files pattern
 	Dialog.addCheckbox("Global Three way junctions analysis?", true); ///compile data of the three way junction in a table
 	Dialog.addMessage("		Cell segmentation parameters: \n ");
-	Dialog.addNumber("Channel for segmentation",100, 1,5, "pixels^2");
+	Dialog.addNumber("Channel for segmentation",2, 1,2, " ");
 	Dialog.addNumber("Min Cell size",100, 1,5, "pixels^2");
 	Dialog.addNumber("Max Cell size",20000, 1,5, "pixels^2");
 	Dialog.addNumber("Wavelet plane",2, 1,5, " 2 to 4 ");
@@ -59,7 +59,7 @@ setBatchMode("exit and display");
 	Dialog.show();
 	Simp=Dialog.getCheckbox();
 	Tway=Dialog.getCheckbox();
-	Channel=Dialog.getCheckbox();
+	Channel=Dialog.getNumber();
 	CellMin = Dialog.getNumber();
 	CellMax = Dialog.getNumber();
 	wave = Dialog.getNumber();
@@ -80,8 +80,12 @@ if (Simp==false){
 	run("New... ", "name="+f+" type=Table");
 	print(f,"\\Headings: Image name \tCell number\t Cell file \t Cell Area \t Apical mb length \t Basal membrane length \t Basal vs apical distance \t Lateral Mb Left 1\t Lateral Mb Left 2\t Lateral Mb Left 3\t Lateral Mb Left 4\t TWJunction 1\t TWJunction 2\t TWJunction 3\tLateral Mb Right 1\t Lateral Mb Right 2\t Lateral Mb Right 3\t Lateral Mb Right 4\t  TWJunction 1\t TWJunction 2\t TWJunction 3\tCentroids axis Angle \t Upper_left angle \t Upper_right angle \t Lower_right angle \t Lower_left angle");	
 	}
+	title=getTitle();
+	Stack.setChannel(Channel);
+	run("Duplicate...", "duplicate channels="+Channel);
+	close(title);
+	rename(title);
 	
-
 /// background removal
 	run("Subtract Background...", "rolling=50 stack");
 
