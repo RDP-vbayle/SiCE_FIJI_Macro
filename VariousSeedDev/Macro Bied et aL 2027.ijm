@@ -113,6 +113,7 @@ setBatchMode(false);
 			p++;
 		}
 		}
+		
 // Print results in the the result table
 
 	for (m = 0; m < totRois; m++) {
