@@ -12,7 +12,7 @@
 	run("Set Measurements...", "area mean centroid center fit shape stack feret's redirect=None decimal=3");
 	run("Select None");
 
-/// Parameter selection
+/// Parameter selection 
 
 	Dialog.create("INPUT parameters:");
 	Dialog.addNumber("Layer number? ",5);
