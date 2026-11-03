@@ -113,6 +113,8 @@ setBatchMode(false);
 			p++;
 		}
 		}
+// Print results in the the result table
+
 	for (m = 0; m < totRois; m++) {
 		print(f, title+"\t"+ Celllayer[m] +"\t"+m+1+"\t"+CellArea[m]+"\t"+CellMajAx[m]+"\t"+CellMinAx[m]+"\t"+CellCirc[m]+"\t"+CellRound[m]);			
 		}
