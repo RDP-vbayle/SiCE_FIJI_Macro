@@ -18,7 +18,7 @@ getDimensions(width, height, channels, slices, frames);
 
 ///Kymograph to visualise shifts in acquisition
 
-makeLine(386, 303, 2974, 297);
+makeLine(473, 579, 2901, 579);
 	run("Multi Kymograph", "linewidth=1");
 	makeRectangle(0, 0, 600, slices);
 	run("Crop");

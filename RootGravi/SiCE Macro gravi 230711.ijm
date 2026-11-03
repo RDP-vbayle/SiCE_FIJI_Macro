@@ -19,7 +19,7 @@ run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel");
 
 	Dialog.create("SiCE MacroGravi");
 	Dialog.addMessage("		Cell segmentation parameters: \n ");
-	Dialog.addNumber("Min Root size",500, 0,4, "pixels^2");
+	Dialog.addNumber("Min Root size",300, 0,4, "pixels^2");
 	Dialog.addNumber("Rolling ball size",5, 0,3, " ");
 	Dialog.addNumber("Min DoG sigma",2, 1,3, "	");
 	Dialog.addNumber("Max DoG sigma",4, 1,3, "	");
